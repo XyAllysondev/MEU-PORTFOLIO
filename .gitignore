@@ -1,0 +1,12 @@
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+
+# Temp / preview
+_preview.html
+*.log
