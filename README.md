@@ -5,7 +5,7 @@ mira no cursor, scanlines e um **robô SVG que rastreia o mouse**. Escrito do
 zero em **HTML5, CSS puro e JavaScript vanilla** — sem frameworks, sem
 dependências, sem etapa de build.
 
-🔗 **Ao vivo:** _(configure o GitHub Pages para publicar)_
+🔗 **Ao vivo:** <https://xyallysondev.github.io/MEU-PORTFOLIO/>
 
 ## ✦ A unidade robótica
 
