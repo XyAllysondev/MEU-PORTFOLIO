@@ -1,289 +1,395 @@
-/* ══════════════════════════════════════════════════════════════════════════
-   Portfolio interactions
-   ══════════════════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════
+   ALLYSON VINÍCIUS — SISTEMA v2.6
+   JavaScript vanilla. Sem bibliotecas, sem etapa de build.
+   ═══════════════════════════════════════════════════════════════════ */
 
-/* ── Preloader ─────────────────────────────────────────────────────────── */
 (function () {
-  const pre = document.getElementById('preloader');
-  if (!pre) return;
-  window.addEventListener('load', () => {
-    setTimeout(() => pre.classList.add('done'), 900);
-  });
-  // safety fallback
-  setTimeout(() => pre.classList.add('done'), 2600);
-})();
+  'use strict';
 
-/* ── Custom cursor (desktop only) ──────────────────────────────────────── */
-(function () {
-  const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  if (!fine) return;
+  var $  = function (s, c) { return (c || document).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
 
-  const dot = document.querySelector('.cursor-dot');
-  const ring = document.querySelector('.cursor-ring');
-  if (!dot || !ring) return;
+  var calmo = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var toque = window.matchMedia('(pointer: coarse)').matches;
 
-  document.body.classList.add('has-cursor');
+  /* ── 01 · BOOT ─────────────────────────────────────────────────── */
 
-  let mx = 0, my = 0, rx = 0, ry = 0;
+  var boot     = $('#boot');
+  var bootLog  = $('#boot-log');
+  var bootFill = $('#boot-fill');
 
-  window.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
-  });
-
-  function loop() {
-    rx += (mx - rx) * 0.18;
-    ry += (my - ry) * 0.18;
-    ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
-    requestAnimationFrame(loop);
-  }
-  loop();
-
-  const interactive = 'a, button, .project-card, .cert-card, .stat-card, .skill-card, input, textarea, .tag, .social-btn';
-  document.querySelectorAll(interactive).forEach(el => {
-    el.addEventListener('mouseenter', () => { ring.classList.add('hover'); dot.classList.add('hover'); });
-    el.addEventListener('mouseleave', () => { ring.classList.remove('hover'); dot.classList.remove('hover'); });
-  });
-})();
-
-/* ── Scroll progress bar ───────────────────────────────────────────────── */
-(function () {
-  const bar = document.querySelector('.scroll-progress');
-  if (!bar) return;
-  function update() {
-    const h = document.documentElement.scrollHeight - window.innerHeight;
-    const p = h > 0 ? (window.scrollY / h) * 100 : 0;
-    bar.style.width = p + '%';
-  }
-  window.addEventListener('scroll', update, { passive: true });
-  update();
-})();
-
-/* ── Typewriter ────────────────────────────────────────────────────────── */
-(function () {
-  const el = document.getElementById('typewriter');
-  if (!el) return;
-
-  const lines = [
-    'Construindo interfaces que impressionam.',
-    'Código limpo. Design preciso.',
-    'Front-End Developer & TI Support.',
-    'Transformando ideias em produtos reais.',
+  var LINHAS = [
+    '> inicializando sistema av-2026...',
+    '> montando interface .......... OK',
+    '> carregando módulos [06/06] .. OK',
+    '> unidade robótica av-01 ...... ONLINE',
+    '> rastreamento de cursor ...... ATIVO',
+    '> pronto.'
   ];
-  let li = 0, ci = 0, deleting = false;
 
-  function tick() {
-    const line = lines[li];
-    if (!deleting) {
-      el.textContent = line.slice(0, ++ci);
-      if (ci === line.length) { deleting = true; setTimeout(tick, 1800); return; }
-    } else {
-      el.textContent = line.slice(0, --ci);
-      if (ci === 0) { deleting = false; li = (li + 1) % lines.length; setTimeout(tick, 400); return; }
-    }
-    setTimeout(tick, deleting ? 38 : 72);
+  function encerraBoot() {
+    if (!boot) return;
+    boot.classList.add('fim');
+    document.body.style.overflow = '';
+    window.setTimeout(function () {
+      if (boot && boot.parentNode) boot.parentNode.removeChild(boot);
+    }, 700);
   }
-  tick();
-})();
 
-/* ── Scroll reveal (staggered) ─────────────────────────────────────────── */
-(function () {
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('visible'), i * 90);
-        obs.unobserve(e.target);
+  if (boot && !calmo) {
+    document.body.style.overflow = 'hidden';
+    var li = 0, prog = 0;
+
+    var escreve = window.setInterval(function () {
+      if (li < LINHAS.length) {
+        if (bootLog) bootLog.textContent += LINHAS[li] + '\n';
+        li++;
+        prog = Math.round((li / LINHAS.length) * 100);
+        if (bootFill) bootFill.style.width = prog + '%';
+      } else {
+        window.clearInterval(escreve);
+        window.setTimeout(encerraBoot, 380);
       }
-    });
-  }, { threshold: .12, rootMargin: '0px 0px -60px 0px' });
+    }, 210);
+  } else {
+    encerraBoot();
+  }
 
-  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-})();
+  /* ── 02 · RETÍCULA DO MOUSE ────────────────────────────────────── */
 
-/* ── Skill bars ────────────────────────────────────────────────────────── */
-(function () {
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.querySelectorAll('.skill-fill').forEach(bar => {
-          bar.style.width = bar.dataset.width + '%';
+  var mira = $('#reticula');
+
+  if (mira && !toque && !calmo) {
+    document.body.classList.add('mira-ativa');
+
+    // Escrita direta de transform no mousemove: o browser já entrega no
+    // máximo um evento por quadro, então rAF e interpolação só somariam
+    // atraso. Sem leitura de layout, sem laço permanente.
+    window.addEventListener('mousemove', function (e) {
+      mira.style.transform = 'translate3d(' + e.clientX + 'px,' + e.clientY + 'px,0)';
+      if (!mira.classList.contains('viva')) mira.classList.add('viva');
+    }, { passive: true });
+
+    // troca de estado só quando entra/sai de algo clicável
+    var sobre = false;
+    document.addEventListener('mouseover', function (e) {
+      var alvo = !!e.target.closest('a, button, input, textarea, .cert, .canal');
+      if (alvo === sobre) return;
+      sobre = alvo;
+      mira.classList.toggle('sobre', alvo);
+    }, { passive: true });
+
+    document.addEventListener('mouseleave', function () { mira.classList.remove('viva'); });
+    document.addEventListener('mouseenter', function () { mira.classList.add('viva'); });
+  }
+
+  /* ── 03 · RELÓGIO ──────────────────────────────────────────────── */
+
+  var relogio = $('#relogio');
+  if (relogio) {
+    var tique = function () {
+      var d = new Date(), t;
+      try {
+        t = d.toLocaleTimeString('pt-BR', {
+          timeZone: 'America/Recife', hour12: false,
+          hour: '2-digit', minute: '2-digit', second: '2-digit'
         });
-        obs.unobserve(e.target);
-      }
-    });
-  }, { threshold: .3 });
-  document.querySelectorAll('.skill-card').forEach(el => obs.observe(el));
-})();
+      } catch (e) { t = d.toTimeString().slice(0, 8); }
+      relogio.textContent = t;
+    };
+    tique();
+    window.setInterval(tique, 1000);
+  }
 
-/* ── Stat counters ─────────────────────────────────────────────────────── */
-(function () {
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      const el = e.target;
-      const raw = el.textContent.trim();
-      const match = raw.match(/^(\d+)(.*)$/);
-      obs.unobserve(el);
-      if (!match) return;                       // e.g. "∞" — leave as-is
-      const target = parseInt(match[1], 10);
-      const suffix = match[2];
-      let cur = 0;
-      const step = Math.max(1, Math.ceil(target / 30));
-      const t = setInterval(() => {
-        cur += step;
-        if (cur >= target) { cur = target; clearInterval(t); }
-        el.textContent = cur + suffix;
-      }, 34);
-    });
-  }, { threshold: .6 });
-  document.querySelectorAll('.stat-number').forEach(el => obs.observe(el));
-})();
+  /* ── 04 · MÁQUINA DE ESCREVER ──────────────────────────────────── */
 
-/* ── Nav scroll state + active link ────────────────────────────────────── */
-(function () {
-  const nav = document.querySelector('nav');
-  window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 20);
-  }, { passive: true });
+  var digita = $('#digita');
+  if (digita) {
+    var FRASES = [
+      'engenharia da computação',
+      'desenvolvedor front-end',
+      'suporte de ti & redes',
+      'javascript, css e html puro'
+    ];
+    var fi = 0, ci = 0, apagando = false;
 
-  const sections = document.querySelectorAll('section[id]');
-  const links = document.querySelectorAll('nav ul a');
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        links.forEach(a => a.classList.remove('active'));
-        const active = document.querySelector(`nav ul a[href="#${e.target.id}"]`);
-        if (active) active.classList.add('active');
-      }
-    });
-  }, { threshold: .4 });
-  sections.forEach(s => obs.observe(s));
-})();
+    (function roda() {
+      var frase = FRASES[fi];
+      digita.textContent = frase.slice(0, ci);
 
-/* ── Mobile hamburger ──────────────────────────────────────────────────── */
-(function () {
-  const btn = document.getElementById('nav-hamburger');
-  const ul = document.querySelector('nav ul');
-  if (!btn || !ul) return;
-  btn.addEventListener('click', () => {
-    ul.classList.toggle('open');
-    btn.classList.toggle('open');
-  });
-  ul.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-    ul.classList.remove('open');
-    btn.classList.remove('open');
-  }));
-})();
+      if (!apagando && ci < frase.length) { ci++; window.setTimeout(roda, 62); }
+      else if (!apagando)                 { apagando = true; window.setTimeout(roda, 1900); }
+      else if (ci > 0)                    { ci--; window.setTimeout(roda, 28); }
+      else { apagando = false; fi = (fi + 1) % FRASES.length; window.setTimeout(roda, 320); }
+    })();
+  }
 
-/* ── Back to top ───────────────────────────────────────────────────────── */
-(function () {
-  const btn = document.getElementById('back-top');
-  if (!btn) return;
-  window.addEventListener('scroll', () => {
-    btn.classList.toggle('show', window.scrollY > 500);
-  }, { passive: true });
-  btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-})();
+  /* ── 05 · PROGRESSO + BARRA DE SISTEMA ─────────────────────────── */
 
-/* ── Spotlight follow (cards track cursor for radial glow + subtle tilt) ─── */
-(function () {
-  const cards = document.querySelectorAll('.project-card, .skill-card, .stat-card, .cert-card');
-  cards.forEach(card => {
-    card.addEventListener('mousemove', e => {
-      const r = card.getBoundingClientRect();
-      const px = e.clientX - r.left;
-      const py = e.clientY - r.top;
-      card.style.setProperty('--mx', px + 'px');
-      card.style.setProperty('--my', py + 'px');
+  var progresso = $('#progresso');
+  var hud       = $('#hud');
+  var ultimo    = 0;
+  var travado   = false;
 
-      if (card.classList.contains('project-card')) {
-        const x = px / r.width - .5;
-        const y = py / r.height - .5;
-        card.style.transform = `perspective(900px) rotateX(${-y * 7}deg) rotateY(${x * 7}deg) translateY(-6px)`;
-      }
-    });
-    card.addEventListener('mouseleave', () => {
-      if (card.classList.contains('project-card')) card.style.transform = '';
-    });
-  });
-})();
+  function aoRolar() {
+    var y = window.scrollY || window.pageYOffset;
+    var t = document.documentElement.scrollHeight - window.innerHeight;
 
-/* ── Magnetic buttons ──────────────────────────────────────────────────── */
-(function () {
-  const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  if (!fine) return;
-  document.querySelectorAll('.btn, .nav-cta, .social-btn, #back-top').forEach(el => {
-    el.addEventListener('mousemove', e => {
-      const r = el.getBoundingClientRect();
-      const x = e.clientX - r.left - r.width / 2;
-      const y = e.clientY - r.top - r.height / 2;
-      el.style.transform = `translate(${x * 0.25}px, ${y * 0.35}px)`;
-    });
-    el.addEventListener('mouseleave', () => { el.style.transform = ''; });
-  });
-})();
+    if (progresso) progresso.style.width = (t > 0 ? (y / t) * 100 : 0) + '%';
 
-/* ── Hero parallax on scroll ───────────────────────────────────────────── */
-(function () {
-  const inner = document.querySelector('.hero-inner');
-  if (!inner) return;
-  window.addEventListener('scroll', () => {
-    const y = window.scrollY;
-    if (y < window.innerHeight) {
-      inner.style.transform = `translateY(${y * 0.28}px)`;
-      inner.style.opacity = String(Math.max(0, 1 - y / (window.innerHeight * 0.75)));
+    if (hud && !travado) {
+      if (y > 240 && y > ultimo) hud.classList.add('recolhido');
+      else hud.classList.remove('recolhido');
     }
+    ultimo = y;
+  }
+
+  var agendado = false;
+  window.addEventListener('scroll', function () {
+    if (agendado) return;
+    agendado = true;
+    requestAnimationFrame(function () { aoRolar(); agendado = false; });
   }, { passive: true });
-})();
+  aoRolar();
 
-/* ── Contact form ──────────────────────────────────────────────────────── */
-(function () {
-  const form = document.getElementById('contact-form');
-  if (!form) return;
+  /* ── 06 · MENU MÓVEL ───────────────────────────────────────────── */
 
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    const btn = this.querySelector('button[type="submit"]');
-    const original = btn.innerHTML;
+  var burger = $('#burger');
+  var menu   = $('#menu');
 
-    const endpoint = form.getAttribute('data-endpoint');
+  $$('#menu nav a').forEach(function (a, i) { a.style.setProperty('--d', i); });
 
-    // If a Formspree/endpoint is configured, actually send it.
-    if (endpoint && endpoint.startsWith('http')) {
-      btn.disabled = true;
-      btn.textContent = 'Enviando…';
-      fetch(endpoint, {
+  function fecha() {
+    if (!menu) return;
+    menu.classList.remove('aberto');
+    menu.setAttribute('aria-hidden', 'true');
+    if (burger) {
+      burger.classList.remove('x');
+      burger.setAttribute('aria-expanded', 'false');
+      burger.setAttribute('aria-label', 'Abrir menu');
+    }
+    document.body.style.overflow = '';
+    travado = false;
+  }
+
+  if (burger && menu) {
+    burger.addEventListener('click', function () {
+      if (menu.classList.contains('aberto')) return fecha();
+      menu.classList.add('aberto');
+      menu.setAttribute('aria-hidden', 'false');
+      burger.classList.add('x');
+      burger.setAttribute('aria-expanded', 'true');
+      burger.setAttribute('aria-label', 'Fechar menu');
+      document.body.style.overflow = 'hidden';
+      travado = true;
+      hud && hud.classList.remove('recolhido');
+    });
+
+    $$('#menu a').forEach(function (a) { a.addEventListener('click', fecha); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && menu.classList.contains('aberto')) fecha();
+    });
+  }
+
+  /* ── 07 · REVELAÇÃO, BARRAS E CONTADORES ───────────────────────── */
+
+  function preencheBarras(el) {
+    var b = el.querySelector('.diag-barra i');
+    if (b) b.style.width = (el.getAttribute('data-v') || 0) + '%';
+  }
+
+  function contaAte(el) {
+    var b = el.querySelector('b[data-alvo]');
+    if (!b) return;
+    var fim = parseInt(b.getAttribute('data-alvo'), 10) || 0;
+    var ini = null;
+    function passo(t) {
+      if (ini === null) ini = t;
+      var p = Math.min(1, (t - ini) / 1100);
+      b.textContent = Math.round(fim * (1 - Math.pow(1 - p, 3))) + (p === 1 ? '+' : '');
+      if (p < 1) requestAnimationFrame(passo);
+    }
+    requestAnimationFrame(passo);
+  }
+
+  var alvos = $$('.revela');
+
+  if (calmo || !('IntersectionObserver' in window)) {
+    alvos.forEach(function (el) {
+      el.classList.add('dentro');
+      preencheBarras(el);
+      contaAte(el);
+    });
+  } else {
+    var olho = new IntersectionObserver(function (ents) {
+      ents.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('dentro');
+        preencheBarras(e.target);
+        contaAte(e.target);
+        olho.unobserve(e.target);
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -6% 0px' });
+
+    alvos.forEach(function (el, i) {
+      el.style.transitionDelay = ((i % 5) * 70) + 'ms';
+      olho.observe(el);
+    });
+  }
+
+  /* ── 08 · MÓDULO ATIVO NA BARRA ────────────────────────────────── */
+
+  var secoes = $$('main section[id]');
+  var elos   = $$('.hud-nav a');
+
+  if (secoes.length && 'IntersectionObserver' in window) {
+    var atualId = null;
+    var espia = new IntersectionObserver(function (ents) {
+      ents.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var id = e.target.id;
+        if (id === atualId) return;
+        atualId = id;
+
+        elos.forEach(function (a) {
+          a.classList.toggle('ativo', a.getAttribute('href') === '#' + id);
+        });
+
+        // o copiloto escuta isto para narrar o módulo
+        window.dispatchEvent(new CustomEvent('secao', { detail: id }));
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    secoes.forEach(function (s) { espia.observe(s); });
+  }
+
+  /* ── 09 · FORMULÁRIO ───────────────────────────────────────────── */
+
+  var form    = $('#form');
+  var retorno = $('#retorno');
+
+  function diz(txt, tipo) {
+    if (!retorno) return;
+    retorno.textContent = txt;
+    retorno.className = 'retorno' + (tipo ? ' ' + tipo : '');
+  }
+
+  if (form) {
+    $$('input, textarea', form).forEach(function (c) {
+      c.addEventListener('input', function () { c.parentNode.classList.remove('falha'); });
+    });
+
+    form.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+
+      var erro = false;
+      $$('input[required], textarea[required]', form).forEach(function (c) {
+        var vazio = !c.value.trim();
+        var mal = c.type === 'email' && c.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.value);
+        if (vazio || mal) { c.parentNode.classList.add('falha'); erro = true; }
+      });
+
+      if (erro) return diz('> ERRO: campos obrigatórios incompletos.', 'bad');
+
+      var btn = $('button[type="submit"]', form);
+      var rot = btn ? $('span', btn).textContent : '';
+      if (btn) { btn.disabled = true; $('span', btn).textContent = 'TRANSMITINDO'; }
+      diz('> abrindo canal…');
+
+      fetch(form.getAttribute('data-endpoint'), {
         method: 'POST',
-        headers: { 'Accept': 'application/json' },
         body: new FormData(form),
-      }).then(res => {
-        if (res.ok) { showSuccess(); }
-        else { showError(); }
-      }).catch(showError);
+        headers: { Accept: 'application/json' }
+      })
+        .then(function (r) {
+          if (!r.ok) throw new Error(r.status);
+          form.reset();
+          diz('> TRANSMISSÃO RECEBIDA. Respondo em breve.', 'ok');
+        })
+        .catch(function () {
+          diz('> FALHA NO ENVIO. Use allysonfulldev@gmail.com', 'bad');
+        })
+        .then(function () {
+          if (btn) { btn.disabled = false; $('span', btn).textContent = rot; }
+        });
+    });
+  }
 
-      function showSuccess() {
-        btn.textContent = 'Mensagem enviada! ✓';
-        btn.style.background = 'linear-gradient(135deg,#22c55e,#16a34a)';
-        form.reset();
-        reset();
-      }
-      function showError() {
-        btn.textContent = 'Erro — tente de novo';
-        btn.style.background = 'linear-gradient(135deg,#ef4444,#b91c1c)';
-        reset();
-      }
-      function reset() {
-        setTimeout(() => { btn.innerHTML = original; btn.style.background = ''; btn.disabled = false; }, 3200);
-      }
-      return;
-    }
+  /* ── 10 · ROLAGEM COM COMPENSAÇÃO ──────────────────────────────── */
 
-    // Fallback: no endpoint configured yet — simulate.
-    btn.textContent = 'Mensagem enviada! ✓';
-    btn.style.background = 'linear-gradient(135deg,#22c55e,#16a34a)';
-    btn.disabled = true;
-    setTimeout(() => {
-      btn.innerHTML = original; btn.style.background = ''; btn.disabled = false; this.reset();
-    }, 3000);
+  $$('a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function (ev) {
+      var alvo = a.getAttribute('href');
+      if (!alvo) return;
+
+      if (alvo === '#') {
+        ev.preventDefault();
+        window.scrollTo({ top: 0, behavior: calmo ? 'auto' : 'smooth' });
+        return;
+      }
+
+      var dest = document.querySelector(alvo);
+      if (!dest) return;
+      ev.preventDefault();
+      var topo = dest.getBoundingClientRect().top + window.scrollY - 66;
+      window.scrollTo({ top: Math.max(0, topo), behavior: calmo ? 'auto' : 'smooth' });
+      if (history.replaceState) history.replaceState(null, '', alvo);
+    });
   });
+
+
+  /* ── 11 · PROJETOS: PRÉVIA VIVA E EXECUÇÃO EMBUTIDA ────────────── */
+
+  // Pausa a deriva e a varredura dos cards fora da tela. Animação que
+  // ninguém vê ainda custa composição — desligar é de graça.
+  var quadros = $$('.proj-img');
+  if (quadros.length && 'IntersectionObserver' in window) {
+    var vigia = new IntersectionObserver(function (ents) {
+      ents.forEach(function (e) { e.target.classList.toggle('fora', !e.isIntersecting); });
+    }, { rootMargin: '120px' });
+    quadros.forEach(function (q) { vigia.observe(q); });
+  }
+
+  // Carrega o projeto de verdade num iframe, só quando pedido.
+  $$('.proj-play').forEach(function (botao) {
+    var caixa = botao.closest('.proj-img');
+    if (!caixa) return;
+
+    var url  = caixa.getAttribute('data-vivo');
+    var nome = caixa.getAttribute('data-nome') || 'projeto';
+    var rotulo = $('span', botao);
+
+    botao.addEventListener('click', function () {
+      var vivo = caixa.classList.contains('ao-vivo');
+
+      if (vivo) {
+        // desliga: remove o iframe para devolver memória e CPU
+        var f = $('.proj-quadro', caixa);
+        var c = $('.proj-carregando', caixa);
+        if (f) f.remove();
+        if (c) c.remove();
+        caixa.classList.remove('ao-vivo');
+        rotulo.textContent = 'RODAR AO VIVO';
+        return;
+      }
+
+      var aviso = document.createElement('div');
+      aviso.className = 'proj-carregando';
+      aviso.textContent = 'INICIANDO ' + nome.toUpperCase() + '…';
+
+      var frame = document.createElement('iframe');
+      frame.className = 'proj-quadro';
+      frame.title = nome + ' rodando ao vivo';
+      frame.loading = 'lazy';
+      frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox');
+      frame.setAttribute('referrerpolicy', 'no-referrer');
+      frame.addEventListener('load', function () { aviso.classList.add('sumiu'); });
+      frame.src = url;
+
+      caixa.appendChild(aviso);
+      caixa.appendChild(frame);
+      caixa.classList.add('ao-vivo');
+      rotulo.textContent = 'PARAR';
+    });
+  });
+
 })();
