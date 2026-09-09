@@ -15,7 +15,11 @@
 
   --txt:       #d6e3f1;
   --txt-2:     #8b9db3;
-  --txt-3:     #5a6b80;
+  /* #5a6b80 dava 3.69:1 sobre --void e era usado so nos rotulos de
+     9-11px (tags, labels de formulario, orgao dos certificados) —
+     abaixo dos 4.5:1 da AA. Este tom mantem matiz e saturacao e
+     sobe para 5.54:1 (4.82:1 ja com as scanlines por cima). */
+  --txt-3:     #75889e;
 
   --ciano:     #22e1ff;
   --lima:      #9dff5a;
@@ -24,6 +28,10 @@
 
   --linha:     rgba(34, 225, 255, .18);
   --linha-fr:  rgba(34, 225, 255, .08);
+  /* borda de controle de formulario: --linha-fr dava 1.12:1 contra o
+     fundo do campo, ou seja, a caixa nao se via. 3.19:1 atende o
+     minimo de 3:1 para limite de componente (WCAG 1.4.11). */
+  --linha-campo: rgba(34, 225, 255, .45);
   --brilho:    rgba(34, 225, 255, .32);
 
   --disp:  'Chakra Petch', 'Arial Narrow', sans-serif;
@@ -62,6 +70,18 @@ ul, dl { list-style: none; }
 button, input, textarea { font: inherit; color: inherit; }
 
 :focus-visible { outline: 2px solid var(--ciano); outline-offset: 3px; }
+
+/* texto que so o leitor de tela recebe: usado onde a versao visivel e
+   uma animacao (a linha do subtitulo e digitada letra a letra). */
+.so-leitor {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
 
 .mono-acc {
   font-family: var(--mono);
@@ -102,7 +122,11 @@ button, input, textarea { font: inherit; color: inherit; }
   inset: 0;
   z-index: 9100;
   pointer-events: none;
-  opacity: .38;
+  /* A .38 esta camada apagava todo o conteudo: como fica por cima de
+     tudo (z 9100), multiplicava por igual texto e fundo e derrubava o
+     contraste dos rotulos de 9px. A .16 a textura continua legivel
+     como CRT e custa ~1 ponto de contraste em vez de ~4. */
+  opacity: .16;
   background: repeating-linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0) 0 2px,
@@ -335,10 +359,21 @@ main, .hud, .rodape { position: relative; z-index: 2; }
   flex-direction: column;
   justify-content: space-between;
   clip-path: inset(0 0 100% 0);
-  transition: clip-path .6s var(--curva);
+  /* clip-path esconde o desenho mas não tira os links da ordem de
+     tabulação: sem visibility o teclado cai em 6 links invisíveis. */
+  visibility: hidden;
+  /* visibility com 0s: some só depois do clip-path terminar, mas
+     aparece na hora — se ela interpolasse, o foco no primeiro link
+     logo após abrir cairia num elemento ainda invisível. */
+  transition: clip-path .6s var(--curva), visibility 0s linear .6s;
   pointer-events: none;
 }
-.painel-menu.aberto { clip-path: inset(0 0 0 0); pointer-events: auto; }
+.painel-menu.aberto {
+  clip-path: inset(0 0 0 0);
+  visibility: visible;
+  pointer-events: auto;
+  transition: clip-path .6s var(--curva), visibility 0s linear 0s;
+}
 
 .painel-menu nav { display: flex; flex-direction: column; }
 
@@ -440,6 +475,7 @@ main, .hud, .rodape { position: relative; z-index: 2; }
   line-height: .96;
   letter-spacing: .01em;
   margin: 20px 0 14px;
+  overflow-wrap: break-word;
   text-shadow: 0 0 34px rgba(34, 225, 255, .22);
 }
 .titulo::before,
@@ -725,12 +761,19 @@ main, .hud, .rodape { position: relative; z-index: 2; }
   opacity: 0;
   transform: translateY(26px) scale(.85);
   pointer-events: none;
-  transition: opacity .45s var(--curva), transform .45s var(--curva);
+  /* idem menu: sem visibility o botão do copiloto continua focável
+     enquanto está invisível, dentro de um aria-hidden. */
+  visibility: hidden;
+  transition: opacity .45s var(--curva), transform .45s var(--curva),
+              visibility 0s linear .45s;
 }
 .piloto.embarcou {
   opacity: 1;
   transform: none;
   pointer-events: auto;
+  visibility: visible;
+  transition: opacity .45s var(--curva), transform .45s var(--curva),
+              visibility 0s linear 0s;
 }
 
 .piloto-corpo {
@@ -1036,7 +1079,8 @@ main, .hud, .rodape { position: relative; z-index: 2; }
 
 .projetos {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  /* o min(…, 100%) impede que a faixa exija mais largura que a tela */
+  grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
   gap: clamp(18px, 2.4vw, 30px);
 }
 
@@ -1212,7 +1256,7 @@ main, .hud, .rodape { position: relative; z-index: 2; }
 
 .certs {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
   gap: 1px;
   background: var(--linha-fr);
   border: 1px solid var(--linha-fr);
@@ -1309,7 +1353,7 @@ main, .hud, .rodape { position: relative; z-index: 2; }
 .campo textarea {
   width: 100%;
   background: var(--void);
-  border: 1px solid var(--linha-fr);
+  border: 1px solid var(--linha-campo);
   padding: 12px 14px;
   font-family: var(--mono);
   font-size: 13px;
@@ -1325,8 +1369,28 @@ main, .hud, .rodape { position: relative; z-index: 2; }
   border-color: var(--ciano);
   box-shadow: 0 0 0 1px var(--linha), 0 0 18px rgba(34, 225, 255, .12);
 }
+/* o :focus acima troca a borda e apaga o outline, o que serve para o
+   mouse mas é fraco para quem navega por teclado — aqui o anel volta. */
+.campo input:focus-visible,
+.campo textarea:focus-visible {
+  outline: 2px solid var(--ciano);
+  outline-offset: 2px;
+}
+
 .campo.falha input,
 .campo.falha textarea { border-color: var(--rubro); }
+.campo.falha input:focus-visible,
+.campo.falha textarea:focus-visible { outline-color: var(--rubro); }
+
+.campo-erro {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .06em;
+  color: var(--rubro);
+}
+.campo-erro:empty { display: none; }
 
 .retorno {
   margin-top: 14px;
@@ -1401,7 +1465,7 @@ main, .hud, .rodape { position: relative; z-index: 2; }
   .hud-nav a i { display: none; }
   .hero { grid-template-columns: 1fr; text-align: left; min-height: 0; }
   .bot-area { order: -1; margin-bottom: 10px; }
-  .bot { width: min(78%, 320px); }
+  .bot { width: min(70%, 280px); }
   .bot-balao { right: 8%; }
   .perfil-grid { grid-template-columns: 1fr; }
   .foto-painel { max-width: 340px; }
@@ -1418,15 +1482,35 @@ main, .hud, .rodape { position: relative; z-index: 2; }
 
 @media (max-width: 620px) {
   body { font-size: 15px; }
+  /* tela pequena = texto menor e tela mais densa: a textura de CRT
+     so atrapalha a leitura do conteudo principal. */
+  .scanlines { display: none; }
   .modulo-cab { flex-wrap: wrap; gap: 10px; }
   .modulo-tag { display: none; }
   .form-par { grid-template-columns: 1fr; gap: 0; }
   .canal { grid-template-columns: 1fr auto; }
   .canal-tipo { grid-column: 1 / -1; }
   .certs, .projetos { grid-template-columns: 1fr; }
+
+  /* O orgao e nowrap e comia ~100px da linha; o nome do certificado
+     sobrava em 3-4 linhas espremidas. Aqui ele desce para a segunda
+     linha, alinhado sob o nome — mesmo tratamento ja dado a .canal. */
+  .cert {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: 6px 14px;
+  }
+  .cert-org { grid-column: 2; white-space: normal; }
+  .cert:hover { padding-left: 18px; }
   .rodape-cols p:last-child { text-align: left; }
   .hud-status .led { display: none; }
   .bot-balao { max-width: 180px; font-size: 10px; }
+
+  /* O robo ocupava ~270px de altura antes do H1 e empurrava nome,
+     subtitulo e botoes para fora da primeira tela. Menor, o par de
+     botoes volta a caber acima da dobra sem mudar a ordem do bloco. */
+  .bot { width: min(56%, 210px); }
 }
 
 
@@ -1448,6 +1532,8 @@ main, .hud, .rodape { position: relative; z-index: 2; }
 @media (pointer: coarse) {
   .reticula { display: none; }
   body.mira-ativa { cursor: auto; }
+  /* "RASTREANDO CURSOR…" nunca sai do lugar sem mouse: some. */
+  #bot-coord { display: none; }
 }
 
 /* ── 14b · PRÉVIA ANIMADA E EXECUÇÃO AO VIVO ────────────────────── */

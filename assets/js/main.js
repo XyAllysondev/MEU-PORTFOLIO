@@ -27,12 +27,17 @@
     '> pronto.'
   ];
 
+  var escreve = null;
+
   function encerraBoot() {
     if (!boot) return;
-    boot.classList.add('fim');
+    var alvo = boot;
+    boot = null;                       // idempotente: só encerra uma vez
+    window.clearInterval(escreve);
+    alvo.classList.add('fim');
     document.body.style.overflow = '';
     window.setTimeout(function () {
-      if (boot && boot.parentNode) boot.parentNode.removeChild(boot);
+      if (alvo.parentNode) alvo.parentNode.removeChild(alvo);
     }, 700);
   }
 
@@ -40,17 +45,25 @@
     document.body.style.overflow = 'hidden';
     var li = 0, prog = 0;
 
-    var escreve = window.setInterval(function () {
+    escreve = window.setInterval(function () {
       if (li < LINHAS.length) {
         if (bootLog) bootLog.textContent += LINHAS[li] + '\n';
         li++;
         prog = Math.round((li / LINHAS.length) * 100);
         if (bootFill) bootFill.style.width = prog + '%';
       } else {
-        window.clearInterval(escreve);
         window.setTimeout(encerraBoot, 380);
       }
     }, 210);
+
+    // Rede de segurança. O boot tranca a rolagem e só destranca no fim
+    // do intervalo acima; em aba de fundo o Chrome estrangula os timers
+    // e o laço pode morrer antes disso, deixando a página presa e sem
+    // teclado. Estes dois caminhos destrancam sem depender do laço.
+    window.setTimeout(encerraBoot, 5000);
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) encerraBoot();
+    });
   } else {
     encerraBoot();
   }
@@ -159,14 +172,20 @@
 
   $$('#menu nav a').forEach(function (a, i) { a.style.setProperty('--d', i); });
 
-  function fecha() {
+  function fecha(devolveFoco) {
     if (!menu) return;
     menu.classList.remove('aberto');
     menu.setAttribute('aria-hidden', 'true');
+    // inert tira os links da tabulação na hora; o visibility do CSS só
+    // vale depois que a animação de fechar termina.
+    menu.inert = true;
     if (burger) {
       burger.classList.remove('x');
       burger.setAttribute('aria-expanded', 'false');
       burger.setAttribute('aria-label', 'Abrir menu');
+      // só devolve o foco quando o menu fecha sozinho (Escape, botão);
+      // num clique de link o destino da âncora é que deve receber.
+      if (devolveFoco) burger.focus();
     }
     document.body.style.overflow = '';
     travado = false;
@@ -174,20 +193,44 @@
 
   if (burger && menu) {
     burger.addEventListener('click', function () {
-      if (menu.classList.contains('aberto')) return fecha();
+      if (menu.classList.contains('aberto')) return fecha(true);
       menu.classList.add('aberto');
       menu.setAttribute('aria-hidden', 'false');
+      menu.inert = false;
       burger.classList.add('x');
       burger.setAttribute('aria-expanded', 'true');
       burger.setAttribute('aria-label', 'Fechar menu');
       document.body.style.overflow = 'hidden';
       travado = true;
       hud && hud.classList.remove('recolhido');
+
+      var primeiro = $('nav a', menu);
+      if (primeiro) primeiro.focus();
     });
 
-    $$('#menu a').forEach(function (a) { a.addEventListener('click', fecha); });
+    $$('#menu a').forEach(function (a) {
+      a.addEventListener('click', function () { fecha(false); });
+    });
+
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && menu.classList.contains('aberto')) fecha();
+      if (!menu.classList.contains('aberto')) return;
+
+      if (e.key === 'Escape') return fecha(true);
+      if (e.key !== 'Tab') return;
+
+      // enquanto aberto o menu cobre a tela inteira: o Tab circula
+      // dentro dele em vez de passear pela página escondida atrás.
+      var itens = $$('a[href], button', menu);
+      if (!itens.length) return;
+      var ini = itens[0], fim = itens[itens.length - 1];
+
+      if (e.shiftKey && document.activeElement === ini) {
+        e.preventDefault();
+        fim.focus();
+      } else if (!e.shiftKey && document.activeElement === fim) {
+        e.preventDefault();
+        ini.focus();
+      }
     });
   }
 
@@ -274,21 +317,63 @@
   }
 
   if (form) {
-    $$('input, textarea', form).forEach(function (c) {
-      c.addEventListener('input', function () { c.parentNode.classList.remove('falha'); });
+    var CAMPOS = [
+      { alvo: '#f-nome',  saida: '#e-nome',
+        vazio: 'Informe seu nome.' },
+      { alvo: '#f-email', saida: '#e-email',
+        vazio: 'Informe seu e-mail.',
+        formato: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        malformado: 'E-mail inválido. Use o formato nome@dominio.com' },
+      { alvo: '#f-msg',   saida: '#e-msg',
+        vazio: 'Escreva sua mensagem.' }
+    ].filter(function (c) {
+      c.el = $(c.alvo, form);
+      c.txt = $(c.saida, form);
+      return c.el;
+    });
+
+    function problema(c) {
+      var v = c.el.value.trim();
+      if (!v) return c.vazio;
+      if (c.formato && !c.formato.test(v)) return c.malformado;
+      return '';
+    }
+
+    function pinta(c, msg) {
+      c.el.parentNode.classList.toggle('falha', !!msg);
+      c.el.setAttribute('aria-invalid', msg ? 'true' : 'false');
+      if (c.txt) c.txt.textContent = msg;
+    }
+
+    CAMPOS.forEach(function (c) {
+      // digitar limpa o erro na hora: corrigir não deve continuar em
+      // vermelho enquanto o valor ainda está pela metade.
+      c.el.addEventListener('input', function () { pinta(c, ''); });
+      // ao sair do campo, revalida — mas só se o usuário escreveu algo,
+      // para não acusar campo vazio de quem só passou o Tab.
+      c.el.addEventListener('blur', function () {
+        if (c.el.value.trim()) pinta(c, problema(c));
+      });
     });
 
     form.addEventListener('submit', function (ev) {
       ev.preventDefault();
 
-      var erro = false;
-      $$('input[required], textarea[required]', form).forEach(function (c) {
-        var vazio = !c.value.trim();
-        var mal = c.type === 'email' && c.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.value);
-        if (vazio || mal) { c.parentNode.classList.add('falha'); erro = true; }
+      var falhos = [];
+      CAMPOS.forEach(function (c) {
+        var msg = problema(c);
+        pinta(c, msg);
+        if (msg) falhos.push(c);
       });
 
-      if (erro) return diz('> ERRO: campos obrigatórios incompletos.', 'bad');
+      if (falhos.length) {
+        // o leitor de tela anuncia o campo, o estado inválido e a
+        // mensagem ligada por aria-describedby quando o foco chega.
+        falhos[0].el.focus();
+        return diz(falhos.length === 1
+          ? '> ERRO: ' + problema(falhos[0])
+          : '> ERRO: ' + falhos.length + ' campos precisam de correção.', 'bad');
+      }
 
       var btn = $('button[type="submit"]', form);
       var rot = btn ? $('span', btn).textContent : '';
@@ -303,6 +388,7 @@
         .then(function (r) {
           if (!r.ok) throw new Error(r.status);
           form.reset();
+          CAMPOS.forEach(function (c) { pinta(c, ''); });
           diz('> TRANSMISSÃO RECEBIDA. Respondo em breve.', 'ok');
         })
         .catch(function () {

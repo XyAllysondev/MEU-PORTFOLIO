@@ -72,7 +72,7 @@
   </header>
 
   <!-- ▚▚ MENU MÓVEL ▚▚ -->
-  <div class="painel-menu" id="menu" aria-hidden="true">
+  <div class="painel-menu" id="menu" aria-hidden="true" inert>
     <nav>
       <a href="#perfil"><i>01</i>PERFIL</a>
       <a href="#stack"><i>02</i>STACK</a>
@@ -97,8 +97,10 @@
         <h1 class="titulo" data-txt="ALLYSON VINÍCIUS">ALLYSON VINÍCIUS</h1>
 
         <p class="subtitulo">
-          <span class="mono-acc">&gt;</span>
-          <span id="digita"></span><span class="caret"></span>
+          <span class="mono-acc" aria-hidden="true">&gt;</span>
+          <span id="digita" aria-hidden="true">desenvolvedor front-end</span
+          ><span class="caret" aria-hidden="true"></span>
+          <span class="so-leitor">Engenharia da computação, desenvolvedor front-end, suporte de TI e redes.</span>
         </p>
 
         <p class="hero-desc">
@@ -127,9 +129,9 @@
 
       <!-- ▚▚ UNIDADE ROBÓTICA — segue o cursor ▚▚ -->
       <div class="bot-area" id="bot-area">
-        <div class="bot-balao" id="bot-balao"><span id="bot-fala">Olá.</span></div>
+        <div class="bot-balao" id="bot-balao" aria-hidden="true"><span id="bot-fala">Olá.</span></div>
 
-        <svg class="bot" id="bot" viewBox="0 0 360 440" role="img" aria-label="Assistente robótico que acompanha o cursor">
+        <svg class="bot" id="bot" viewBox="0 0 360 440" role="presentation" aria-hidden="true" focusable="false">
           <defs>
             <linearGradient id="gChassi" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0" stop-color="#1b2534"/>
@@ -208,7 +210,8 @@
           </g>
         </svg>
 
-        <div class="bot-legenda">
+        <!-- telemetria decorativa: #bot-coord muda a cada mousemove -->
+        <div class="bot-legenda" aria-hidden="true">
           <span class="mono-acc">UNIDADE_AV-01</span>
           <span id="bot-coord">RASTREANDO CURSOR…</span>
         </div>
@@ -632,11 +635,15 @@
           <div class="form-par">
             <p class="campo">
               <label for="f-nome">NOME</label>
-              <input type="text" id="f-nome" name="nome" placeholder="seu nome" required />
+              <input type="text" id="f-nome" name="nome" placeholder="seu nome" required
+                     aria-describedby="e-nome" />
+              <span class="campo-erro" id="e-nome"></span>
             </p>
             <p class="campo">
               <label for="f-email">E-MAIL</label>
-              <input type="email" id="f-email" name="email" placeholder="voce@dominio.com" required />
+              <input type="email" id="f-email" name="email" placeholder="voce@dominio.com" required
+                     aria-describedby="e-email" />
+              <span class="campo-erro" id="e-email"></span>
             </p>
           </div>
           <p class="campo">
@@ -645,7 +652,9 @@
           </p>
           <p class="campo">
             <label for="f-msg">MENSAGEM</label>
-            <textarea id="f-msg" name="mensagem" rows="5" placeholder="digite aqui..." required></textarea>
+            <textarea id="f-msg" name="mensagem" rows="5" placeholder="digite aqui..." required
+                      aria-describedby="e-msg"></textarea>
+            <span class="campo-erro" id="e-msg"></span>
           </p>
           <button type="submit" class="btn btn-forte btn-full">
             <span>TRANSMITIR</span>
@@ -675,8 +684,8 @@
   </footer>
 
   <!-- ▚▚ COPILOTO — acompanha a leitura e comenta cada módulo ▚▚ -->
-  <div class="piloto" id="piloto" aria-hidden="true">
-    <div class="piloto-balao" id="piloto-balao"><span id="piloto-fala"></span></div>
+  <div class="piloto" id="piloto" aria-hidden="true" inert>
+    <div class="piloto-balao" id="piloto-balao" aria-hidden="true"><span id="piloto-fala"></span></div>
     <button class="piloto-corpo" id="piloto-corpo" aria-label="Voltar ao topo">
       <svg viewBox="0 0 120 132" width="76" height="84">
         <g class="piloto-antena">

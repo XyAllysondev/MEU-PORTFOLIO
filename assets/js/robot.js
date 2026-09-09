@@ -76,6 +76,10 @@
   /* ── entrada do mouse ────────────────────────────────────────── */
 
   function mira(cx, cy) {
+    // com movimento reduzido o robô fica parado: sem isto o mousemove
+    // ainda leria layout e abriria o balão a cada quadro.
+    if (calmo) return;
+
     // alvo do robô grande (só interessa quando o hero está visível)
     if (svg && heroNaTela) {
       var c = centro(svg);
@@ -120,7 +124,7 @@
   }, { passive: true });
 
   window.addEventListener('mouseout', function (e) {
-    if (e.relatedTarget) return;
+    if (calmo || e.relatedTarget) return;
     alvo.x = alvo.y = alvo.px = alvo.py = 0;
     if (perto) {
       perto = false;
@@ -197,6 +201,7 @@
       heroNaTela = ents[0].isIntersecting;
       piloto.classList.toggle('embarcou', !heroNaTela);
       piloto.setAttribute('aria-hidden', heroNaTela ? 'true' : 'false');
+      piloto.inert = heroNaTela;
       if (!heroNaTela) liga();
     }, { threshold: 0.18 }).observe(hero);
   }
