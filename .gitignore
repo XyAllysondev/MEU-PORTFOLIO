@@ -13,3 +13,6 @@ _preview.html
 
 # Maestri agent terminals
 .maestri/
+
+# Claude Code internal state
+.claude/
