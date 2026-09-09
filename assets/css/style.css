@@ -1053,7 +1053,10 @@ main, .hud, .rodape { position: relative; z-index: 2; }
 }
 .proj:hover .proj-img img { transform: scale(1.05); filter: none; }
 
-/* capa de logotipo: imagem quadrada não pode ser cortada como print */
+/* Capa de marca — entra quando o projeto não tem captura de tela.
+   Não é estado de erro: é uma placa de identidade com a mesma
+   linguagem do HUD. O fundo acompanha o fundo da própria arte para
+   não deixar emenda visível entre a imagem contida e a moldura. */
 .proj-img.marca {
   background: var(--marca-bg, var(--painel-2));
   display: grid;
@@ -1062,9 +1065,61 @@ main, .hud, .rodape { position: relative; z-index: 2; }
 .proj-img.marca img {
   aspect-ratio: 16 / 10;
   object-fit: contain;
-  padding: 20px 0;
+  padding: 16px 0;
   filter: none;
 }
+
+/* Último recuo: nem a captura nem a marca carregaram. Mantém a
+   caixa e o ritmo do grid em vez de mostrar ícone de imagem quebrada. */
+.proj-img.sem-sinal { background: var(--painel-2); }
+.proj-img.sem-sinal img { visibility: hidden; }
+
+/* Grade fina + brilho frio por cima do quadro inteiro: atravessa a
+   emenda entre arte e moldura e amarra o bloco ao resto do HUD. */
+.proj-img.marca::before,
+.proj-img.sem-sinal::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+  transition: opacity .4s var(--curva);
+  background:
+    radial-gradient(88% 68% at 50% 44%, rgba(34, 225, 255, .09), transparent 66%),
+    repeating-linear-gradient(0deg,  rgba(214, 227, 241, .035) 0 1px, transparent 1px 34px),
+    repeating-linear-gradient(90deg, rgba(214, 227, 241, .035) 0 1px, transparent 1px 34px);
+}
+
+/* mesma mira dos cantos usada no painel da foto */
+.proj-img.marca::after,
+.proj-img.sem-sinal::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  z-index: 2;
+  pointer-events: none;
+  opacity: .8;
+  transition: opacity .4s var(--curva);
+  background:
+    linear-gradient(var(--ciano), var(--ciano)) 0 0 / 1px 22px no-repeat,
+    linear-gradient(var(--ciano), var(--ciano)) 0 0 / 22px 1px no-repeat,
+    linear-gradient(var(--ciano), var(--ciano)) 100% 100% / 1px 22px no-repeat,
+    linear-gradient(var(--ciano), var(--ciano)) 100% 100% / 22px 1px no-repeat;
+}
+
+.proj-img.sem-sinal::before {
+  content: "SEM CAPTURA";
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .18em;
+  color: var(--txt-3);
+}
+
+/* com o iframe no ar, a moldura sai da frente */
+.proj-img.ao-vivo::before,
+.proj-img.ao-vivo::after { opacity: 0; }
 
 .proj-varredura {
   position: absolute;
@@ -1490,3 +1545,17 @@ main, .hud, .rodape { position: relative; z-index: 2; }
 
 /* <picture> nao deve criar caixa: o <img> segue sendo o filho de layout */
 .proj-img picture { display: contents; }
+
+/* Em telas de toque não existe :hover, então a captura ficava presa
+   no estado apagado e a deriva cortava as bordas do print. No mobile
+   a imagem fica limpa, inteira e parada. */
+@media (hover: none), (max-width: 640px) {
+  .proj-img img {
+    filter: none;
+    animation: none;
+    transform: none;
+  }
+  .proj-img[data-vivo] .proj-varredura { animation: none; }
+  .proj-img.marca::after,
+  .proj-img.sem-sinal::after { inset: 9px; }
+}

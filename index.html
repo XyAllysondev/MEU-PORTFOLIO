@@ -375,11 +375,15 @@
         </article>
 
         <article class="painel proj revela">
-          <div class="proj-img" style="--marca-bg:#14141c" data-vivo="https://playnexusrpg.com/" data-nome="Nexus RPG">
-            <img src="assets/img/projeto-nexus-app.png"
-                 alt="Tela de seleção de sistema do Nexus RPG"
-                 loading="lazy" width="1920" height="859"
-                 onerror="this.onerror=null;this.src='assets/img/projeto-nexus.png';this.closest('.proj-img').classList.add('marca')" />
+          <div class="proj-img marca" style="--marca-bg:#131313" data-vivo="https://playnexusrpg.com/" data-nome="Nexus RPG">
+            <!-- Sem captura de tela, a capa é a marca do projeto (.marca).
+                 Se nem a marca carregar, cai para a placa .sem-sinal em
+                 vez do ícone de imagem quebrada. A variável marca-bg
+                 acompanha o fundo da arte para não deixar emenda. -->
+            <img src="assets/img/projeto-nexus.png"
+                 alt="Nexus RPG — mesa virtual para Ordem Paranormal"
+                 loading="lazy" width="512" height="512"
+                 onerror="this.onerror=null;this.closest('.proj-img').classList.add('sem-sinal')" />
             <span class="proj-varredura"></span>
             <button class="proj-play" type="button">
               <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>
