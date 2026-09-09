@@ -10,3 +10,6 @@ desktop.ini
 # Temp / preview
 _preview.html
 *.log
+
+# Maestri agent terminals
+.maestri/
