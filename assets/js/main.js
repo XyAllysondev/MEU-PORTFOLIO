@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════
-   ALLYSON VINÍCIUS — SISTEMA v2.6
+   ALLYSON VINÍCIUS — Portfólio v3
    JavaScript vanilla. Sem bibliotecas, sem etapa de build.
    ═══════════════════════════════════════════════════════════════════ */
 
@@ -10,151 +10,71 @@
   var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
 
   var calmo = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var toque = window.matchMedia('(pointer: coarse)').matches;
 
-  /* ── 01 · BOOT ─────────────────────────────────────────────────── */
+  /* ── 01 · VÍDEO DO HERO ────────────────────────────────────────── */
 
-  var boot     = $('#boot');
-  var bootLog  = $('#boot-log');
-  var bootFill = $('#boot-fill');
+  var video  = $('#video-hero');
+  var toggle = $('#video-toggle');
 
-  var LINHAS = [
-    '> inicializando sistema av-2026...',
-    '> montando interface .......... OK',
-    '> carregando módulos [06/06] .. OK',
-    '> unidade robótica av-01 ...... ONLINE',
-    '> rastreamento de cursor ...... ATIVO',
-    '> pronto.'
-  ];
+  if (video) {
+    // Autoplay silencioso pode ser bloqueado; com movimento reduzido
+    // ficamos no poster e deixamos o botão ligar o vídeo sob demanda.
+    if (calmo) {
+      video.removeAttribute('autoplay');
+      video.pause();
+    }
 
-  var escreve = null;
-
-  function encerraBoot() {
-    if (!boot) return;
-    var alvo = boot;
-    boot = null;                       // idempotente: só encerra uma vez
-    window.clearInterval(escreve);
-    alvo.classList.add('fim');
-    document.body.style.overflow = '';
-    window.setTimeout(function () {
-      if (alvo.parentNode) alvo.parentNode.removeChild(alvo);
-    }, 700);
-  }
-
-  if (boot && !calmo) {
-    document.body.style.overflow = 'hidden';
-    var li = 0, prog = 0;
-
-    escreve = window.setInterval(function () {
-      if (li < LINHAS.length) {
-        if (bootLog) bootLog.textContent += LINHAS[li] + '\n';
-        li++;
-        prog = Math.round((li / LINHAS.length) * 100);
-        if (bootFill) bootFill.style.width = prog + '%';
-      } else {
-        window.setTimeout(encerraBoot, 380);
-      }
-    }, 210);
-
-    // Rede de segurança. O boot tranca a rolagem e só destranca no fim
-    // do intervalo acima; em aba de fundo o Chrome estrangula os timers
-    // e o laço pode morrer antes disso, deixando a página presa e sem
-    // teclado. Estes dois caminhos destrancam sem depender do laço.
-    window.setTimeout(encerraBoot, 5000);
-    document.addEventListener('visibilitychange', function () {
-      if (!document.hidden) encerraBoot();
-    });
-  } else {
-    encerraBoot();
-  }
-
-  /* ── 02 · RETÍCULA DO MOUSE ────────────────────────────────────── */
-
-  var mira = $('#reticula');
-
-  if (mira && !toque && !calmo) {
-    document.body.classList.add('mira-ativa');
-
-    // Escrita direta de transform no mousemove: o browser já entrega no
-    // máximo um evento por quadro, então rAF e interpolação só somariam
-    // atraso. Sem leitura de layout, sem laço permanente.
-    window.addEventListener('mousemove', function (e) {
-      mira.style.transform = 'translate3d(' + e.clientX + 'px,' + e.clientY + 'px,0)';
-      if (!mira.classList.contains('viva')) mira.classList.add('viva');
-    }, { passive: true });
-
-    // troca de estado só quando entra/sai de algo clicável
-    var sobre = false;
-    document.addEventListener('mouseover', function (e) {
-      var alvo = !!e.target.closest('a, button, input, textarea, .cert, .canal');
-      if (alvo === sobre) return;
-      sobre = alvo;
-      mira.classList.toggle('sobre', alvo);
-    }, { passive: true });
-
-    document.addEventListener('mouseleave', function () { mira.classList.remove('viva'); });
-    document.addEventListener('mouseenter', function () { mira.classList.add('viva'); });
-  }
-
-  /* ── 03 · RELÓGIO ──────────────────────────────────────────────── */
-
-  var relogio = $('#relogio');
-  if (relogio) {
-    var tique = function () {
-      var d = new Date(), t;
-      try {
-        t = d.toLocaleTimeString('pt-BR', {
-          timeZone: 'America/Recife', hour12: false,
-          hour: '2-digit', minute: '2-digit', second: '2-digit'
-        });
-      } catch (e) { t = d.toTimeString().slice(0, 8); }
-      relogio.textContent = t;
+    var pintaToggle = function () {
+      if (!toggle) return;
+      var pausado = video.paused;
+      toggle.classList.toggle('pausado', pausado);
+      toggle.setAttribute('aria-pressed', String(pausado));
+      toggle.setAttribute('aria-label', pausado ? 'Reproduzir vídeo' : 'Pausar vídeo');
     };
-    tique();
-    window.setInterval(tique, 1000);
+
+    video.addEventListener('play',  pintaToggle);
+    video.addEventListener('pause', pintaToggle);
+    pintaToggle();
+
+    if (toggle) {
+      toggle.addEventListener('click', function () {
+        if (video.paused) {
+          var p = video.play();
+          if (p && p.catch) p.catch(function () {});
+        } else {
+          video.pause();
+        }
+      });
+    }
+
+    // Não gasta CPU tocando fora da tela.
+    if ('IntersectionObserver' in window && !calmo) {
+      var pausadoPeloUsuario = false;
+      toggle && toggle.addEventListener('click', function () {
+        pausadoPeloUsuario = !video.paused ? false : true;
+      });
+
+      new IntersectionObserver(function (ents) {
+        ents.forEach(function (e) {
+          if (e.isIntersecting) {
+            if (!pausadoPeloUsuario) { var p = video.play(); if (p && p.catch) p.catch(function () {}); }
+          } else {
+            video.pause();
+          }
+        });
+      }, { threshold: 0.2 }).observe(video);
+    }
   }
 
-  /* ── 04 · MÁQUINA DE ESCREVER ──────────────────────────────────── */
+  /* ── 02 · CABEÇALHO E ROLAGEM ──────────────────────────────────── */
 
-  var digita = $('#digita');
-  if (digita) {
-    var FRASES = [
-      'engenharia da computação',
-      'desenvolvedor front-end',
-      'suporte de ti & redes',
-      'javascript, css e html puro'
-    ];
-    var fi = 0, ci = 0, apagando = false;
-
-    (function roda() {
-      var frase = FRASES[fi];
-      digita.textContent = frase.slice(0, ci);
-
-      if (!apagando && ci < frase.length) { ci++; window.setTimeout(roda, 62); }
-      else if (!apagando)                 { apagando = true; window.setTimeout(roda, 1900); }
-      else if (ci > 0)                    { ci--; window.setTimeout(roda, 28); }
-      else { apagando = false; fi = (fi + 1) % FRASES.length; window.setTimeout(roda, 320); }
-    })();
-  }
-
-  /* ── 05 · PROGRESSO + BARRA DE SISTEMA ─────────────────────────── */
-
-  var progresso = $('#progresso');
-  var hud       = $('#hud');
-  var ultimo    = 0;
-  var travado   = false;
+  var topo    = $('#topo');
+  var simbolo = $('#simbolo');
 
   function aoRolar() {
     var y = window.scrollY || window.pageYOffset;
-    var t = document.documentElement.scrollHeight - window.innerHeight;
-
-    if (progresso) progresso.style.width = (t > 0 ? (y / t) * 100 : 0) + '%';
-
-    if (hud && !travado) {
-      if (y > 240 && y > ultimo) hud.classList.add('recolhido');
-      else hud.classList.remove('recolhido');
-    }
-    ultimo = y;
+    if (topo) topo.classList.toggle('rolou', y > 12);
+    if (simbolo && !calmo) simbolo.style.setProperty('--par', (y * -0.06) + 'px');
   }
 
   var agendado = false;
@@ -165,30 +85,25 @@
   }, { passive: true });
   aoRolar();
 
-  /* ── 06 · MENU MÓVEL ───────────────────────────────────────────── */
+  /* ── 03 · MENU MÓVEL ───────────────────────────────────────────── */
 
   var burger = $('#burger');
-  var menu   = $('#menu');
+  var menu   = $('#menu-movel');
 
-  $$('#menu nav a').forEach(function (a, i) { a.style.setProperty('--d', i); });
+  $$('#menu-movel nav a').forEach(function (a, i) { a.style.setProperty('--d', i); });
 
   function fecha(devolveFoco) {
     if (!menu) return;
     menu.classList.remove('aberto');
     menu.setAttribute('aria-hidden', 'true');
-    // inert tira os links da tabulação na hora; o visibility do CSS só
-    // vale depois que a animação de fechar termina.
     menu.inert = true;
     if (burger) {
       burger.classList.remove('x');
       burger.setAttribute('aria-expanded', 'false');
       burger.setAttribute('aria-label', 'Abrir menu');
-      // só devolve o foco quando o menu fecha sozinho (Escape, botão);
-      // num clique de link o destino da âncora é que deve receber.
       if (devolveFoco) burger.focus();
     }
     document.body.style.overflow = '';
-    travado = false;
   }
 
   if (burger && menu) {
@@ -201,114 +116,157 @@
       burger.setAttribute('aria-expanded', 'true');
       burger.setAttribute('aria-label', 'Fechar menu');
       document.body.style.overflow = 'hidden';
-      travado = true;
-      hud && hud.classList.remove('recolhido');
-
       var primeiro = $('nav a', menu);
       if (primeiro) primeiro.focus();
     });
 
-    $$('#menu a').forEach(function (a) {
+    $$('#menu-movel a').forEach(function (a) {
       a.addEventListener('click', function () { fecha(false); });
     });
 
     document.addEventListener('keydown', function (e) {
       if (!menu.classList.contains('aberto')) return;
-
       if (e.key === 'Escape') return fecha(true);
       if (e.key !== 'Tab') return;
 
-      // enquanto aberto o menu cobre a tela inteira: o Tab circula
-      // dentro dele em vez de passear pela página escondida atrás.
       var itens = $$('a[href], button', menu);
       if (!itens.length) return;
       var ini = itens[0], fim = itens[itens.length - 1];
 
-      if (e.shiftKey && document.activeElement === ini) {
-        e.preventDefault();
-        fim.focus();
-      } else if (!e.shiftKey && document.activeElement === fim) {
-        e.preventDefault();
-        ini.focus();
-      }
+      if (e.shiftKey && document.activeElement === ini) { e.preventDefault(); fim.focus(); }
+      else if (!e.shiftKey && document.activeElement === fim) { e.preventDefault(); ini.focus(); }
     });
   }
 
-  /* ── 07 · REVELAÇÃO, BARRAS E CONTADORES ───────────────────────── */
+  /* ── 04 · REVELAÇÃO, BARRAS E CONTADORES ───────────────────────── */
 
-  function preencheBarras(el) {
-    var b = el.querySelector('.diag-barra i');
+  function preencheBarra(el) {
+    var b = el.querySelector('.skill-barra i');
     if (b) b.style.width = (el.getAttribute('data-v') || 0) + '%';
   }
 
-  function contaAte(el) {
-    var b = el.querySelector('b[data-alvo]');
-    if (!b) return;
-    var fim = parseInt(b.getAttribute('data-alvo'), 10) || 0;
+  function contaAte(b) {
+    var fim = parseInt(b.getAttribute('data-conta'), 10) || 0;
+    if (calmo) { b.textContent = fim; return; }
     var ini = null;
     function passo(t) {
       if (ini === null) ini = t;
       var p = Math.min(1, (t - ini) / 1100);
-      b.textContent = Math.round(fim * (1 - Math.pow(1 - p, 3))) + (p === 1 ? '+' : '');
+      b.textContent = Math.round(fim * (1 - Math.pow(1 - p, 3)));
       if (p < 1) requestAnimationFrame(passo);
     }
+    b.textContent = '0';
     requestAnimationFrame(passo);
   }
 
   var alvos = $$('.revela');
 
   if (calmo || !('IntersectionObserver' in window)) {
-    alvos.forEach(function (el) {
-      el.classList.add('dentro');
-      preencheBarras(el);
-      contaAte(el);
-    });
+    alvos.forEach(function (el) { el.classList.add('dentro'); preencheBarra(el); });
+    $$('[data-conta]').forEach(function (b) { b.textContent = b.getAttribute('data-conta'); });
   } else {
     var olho = new IntersectionObserver(function (ents) {
       ents.forEach(function (e) {
         if (!e.isIntersecting) return;
         e.target.classList.add('dentro');
-        preencheBarras(e.target);
-        contaAte(e.target);
+        preencheBarra(e.target);
         olho.unobserve(e.target);
       });
-    }, { threshold: 0.15, rootMargin: '0px 0px -6% 0px' });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    alvos.forEach(function (el) { olho.observe(el); });
 
-    alvos.forEach(function (el, i) {
-      el.style.transitionDelay = ((i % 5) * 70) + 'ms';
-      olho.observe(el);
-    });
+    var contadores = $$('[data-conta]');
+    if (contadores.length) {
+      var olhoConta = new IntersectionObserver(function (ents) {
+        ents.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          contaAte(e.target);
+          olhoConta.unobserve(e.target);
+        });
+      }, { threshold: 0.5 });
+      contadores.forEach(function (b) { olhoConta.observe(b); });
+    }
   }
 
-  /* ── 08 · MÓDULO ATIVO NA BARRA ────────────────────────────────── */
+  /* ── 05 · SEÇÃO ATIVA NO MENU + GUIA ───────────────────────────── */
 
   var secoes = $$('main section[id]');
-  var elos   = $$('.hud-nav a');
+  var elos   = $$('.menu a');
+
+  var guia      = $('#guia');
+  var guiaBalao = $('#guia-balao');
+  var guiaFala  = $('#guia-fala');
+  var guiaVideo = $('#guia-video');
+  var guiaCorpo = $('#guia-corpo');
+
+  var FALAS = {
+    inicio:       'Oi! Eu sou o <b>Allyson</b>. Rola a página que eu te acompanho.',
+    sobre:        'Aqui é a minha história: comecei consertando o que quebrava.',
+    stack:        'Essas são as ferramentas que eu uso <b>todo dia</b>.',
+    projetos:     'Clica em <b>Ver ao vivo</b> — os projetos rodam de verdade aqui dentro.',
+    experiencia:  'Por onde já passei: TI, freela e a faculdade de <b>Engenharia</b>.',
+    certificados: '<b>11 cursos</b> concluídos. Cada um abre o PDF do certificado.',
+    contato:      'Curtiu? Me manda uma mensagem — respondo <b>em horas</b>.'
+  };
+  var falaAtual = 'inicio';
+
+  function guiaDiz(id) {
+    if (!guiaFala || !FALAS[id] || id === falaAtual) return;
+    falaAtual = id;
+    if (calmo) { guiaFala.innerHTML = FALAS[id]; return; }
+    guiaBalao.classList.add('troca');
+    window.setTimeout(function () {
+      guiaFala.innerHTML = FALAS[id];
+      guiaBalao.classList.remove('troca');
+      guiaBalao.classList.add('pulo');
+      window.setTimeout(function () { guiaBalao.classList.remove('pulo'); }, 520);
+    }, 320);
+  }
+
+  if (guia) {
+    // aparece depois que o visitante começa a rolar
+    var mostraGuia = function () {
+      if ((window.scrollY || 0) > 160) guia.classList.add('visivel');
+    };
+    window.addEventListener('scroll', mostraGuia, { passive: true });
+    mostraGuia();
+    if (calmo) guia.classList.add('visivel');
+
+    if (guiaCorpo) {
+      guiaCorpo.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: calmo ? 'auto' : 'smooth' });
+      });
+    }
+
+    if (guiaVideo) {
+      if (calmo) { guiaVideo.removeAttribute('autoplay'); guiaVideo.pause(); }
+      document.addEventListener('visibilitychange', function () {
+        if (calmo) return;
+        if (document.hidden) guiaVideo.pause();
+        else { var p = guiaVideo.play(); if (p && p.catch) p.catch(function () {}); }
+      });
+    }
+  }
 
   if (secoes.length && 'IntersectionObserver' in window) {
-    var atualId = null;
     var espia = new IntersectionObserver(function (ents) {
       ents.forEach(function (e) {
         if (!e.isIntersecting) return;
         var id = e.target.id;
-        if (id === atualId) return;
-        atualId = id;
-
         elos.forEach(function (a) {
           a.classList.toggle('ativo', a.getAttribute('href') === '#' + id);
         });
-
-        // o copiloto escuta isto para narrar o módulo
-        window.dispatchEvent(new CustomEvent('secao', { detail: id }));
+        guiaDiz(id);
       });
-    }, { rootMargin: '-45% 0px -50% 0px' });
+    }, { rootMargin: '-40% 0px -55% 0px' });
     secoes.forEach(function (s) { espia.observe(s); });
   }
 
-  /* ── 09 · FORMULÁRIO ───────────────────────────────────────────── */
+  /* ── 06 · FORMULÁRIO ───────────────────────────────────────────── */
 
   var form    = $('#form');
   var retorno = $('#retorno');
+  var resumo  = $('#erro-resumo');
 
   function diz(txt, tipo) {
     if (!retorno) return;
@@ -318,17 +276,13 @@
 
   if (form) {
     var CAMPOS = [
-      { alvo: '#f-nome',  saida: '#e-nome',
-        vazio: 'Informe seu nome.' },
-      { alvo: '#f-email', saida: '#e-email',
-        vazio: 'Informe seu e-mail.',
-        formato: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-        malformado: 'E-mail inválido. Use o formato nome@dominio.com' },
-      { alvo: '#f-msg',   saida: '#e-msg',
-        vazio: 'Escreva sua mensagem.' }
+      { alvo: '#f-nome',  nome: 'nome',  vazio: 'Informe seu nome.' },
+      { alvo: '#f-email', nome: 'email', vazio: 'Informe seu e-mail.',
+        formato: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, malformado: 'E-mail inválido. Use o formato nome@dominio.com' },
+      { alvo: '#f-msg',   nome: 'mensagem', vazio: 'Escreva sua mensagem.' }
     ].filter(function (c) {
       c.el = $(c.alvo, form);
-      c.txt = $(c.saida, form);
+      c.idErro = 'erro-' + c.nome;
       return c.el;
     });
 
@@ -340,20 +294,50 @@
     }
 
     function pinta(c, msg) {
-      c.el.parentNode.classList.toggle('falha', !!msg);
-      c.el.setAttribute('aria-invalid', msg ? 'true' : 'false');
-      if (c.txt) c.txt.textContent = msg;
+      var container = c.el.closest('.campo') || c.el.parentNode;
+      if (container) container.classList.toggle('invalido', !!msg);
+
+      var span = document.getElementById(c.idErro);
+      if (msg) {
+        if (!span) {
+          span = document.createElement('span');
+          span.className = 'erro-campo';
+          span.id = c.idErro;
+          c.el.insertAdjacentElement('afterend', span);
+        }
+        span.textContent = msg;
+        c.el.setAttribute('aria-invalid', 'true');
+        c.el.setAttribute('aria-describedby', c.idErro);
+      } else {
+        if (span && span.parentNode) span.parentNode.removeChild(span);
+        c.el.removeAttribute('aria-invalid');
+        c.el.removeAttribute('aria-describedby');
+      }
+    }
+
+    function escondeResumo() {
+      if (!resumo) return;
+      resumo.hidden = true;
+      resumo.textContent = '';
+    }
+
+    function rotuloDe(c) {
+      var lbl = form.querySelector('label[for="' + c.el.id + '"]');
+      return lbl ? lbl.textContent.trim() : c.nome;
+    }
+
+    function mostraResumo(falhos) {
+      if (!resumo) return;
+      resumo.textContent = falhos.length === 1
+        ? '1 campo precisa de correção: ' + falhos[0].rotulo + '.'
+        : falhos.length + ' campos precisam de correção: ' + falhos.map(function (f) { return f.rotulo; }).join(', ') + '.';
+      resumo.hidden = false;
+      resumo.focus();
     }
 
     CAMPOS.forEach(function (c) {
-      // digitar limpa o erro na hora: corrigir não deve continuar em
-      // vermelho enquanto o valor ainda está pela metade.
       c.el.addEventListener('input', function () { pinta(c, ''); });
-      // ao sair do campo, revalida — mas só se o usuário escreveu algo,
-      // para não acusar campo vazio de quem só passou o Tab.
-      c.el.addEventListener('blur', function () {
-        if (c.el.value.trim()) pinta(c, problema(c));
-      });
+      c.el.addEventListener('blur',  function () { pinta(c, problema(c)); });
     });
 
     form.addEventListener('submit', function (ev) {
@@ -363,22 +347,24 @@
       CAMPOS.forEach(function (c) {
         var msg = problema(c);
         pinta(c, msg);
-        if (msg) falhos.push(c);
+        if (msg) falhos.push({ msg: msg, rotulo: rotuloDe(c) });
       });
 
       if (falhos.length) {
-        // o leitor de tela anuncia o campo, o estado inválido e a
-        // mensagem ligada por aria-describedby quando o foco chega.
-        falhos[0].el.focus();
-        return diz(falhos.length === 1
-          ? '> ERRO: ' + problema(falhos[0])
-          : '> ERRO: ' + falhos.length + ' campos precisam de correção.', 'bad');
+        mostraResumo(falhos);
+        return diz(falhos.length === 1 ? falhos[0].msg : falhos.length + ' campos precisam de correção.', 'bad');
       }
+      escondeResumo();
 
       var btn = $('button[type="submit"]', form);
-      var rot = btn ? $('span', btn).textContent : '';
-      if (btn) { btn.disabled = true; $('span', btn).textContent = 'TRANSMITINDO'; }
-      diz('> abrindo canal…');
+      var rotSpan = btn ? $('span', btn) : null;
+      var rot = rotSpan ? rotSpan.textContent : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.setAttribute('aria-busy', 'true');
+        if (rotSpan) rotSpan.textContent = 'Enviando…';
+      }
+      diz('Enviando sua mensagem…');
 
       fetch(form.getAttribute('data-endpoint'), {
         method: 'POST',
@@ -389,18 +375,22 @@
           if (!r.ok) throw new Error(r.status);
           form.reset();
           CAMPOS.forEach(function (c) { pinta(c, ''); });
-          diz('> TRANSMISSÃO RECEBIDA. Respondo em breve.', 'ok');
+          diz('Mensagem recebida! Respondo em breve.', 'ok');
         })
         .catch(function () {
-          diz('> FALHA NO ENVIO. Use allysonfulldev@gmail.com', 'bad');
+          diz('Não consegui enviar. Verifique sua conexão ou escreva para allysonfulldev@gmail.com', 'bad');
         })
         .then(function () {
-          if (btn) { btn.disabled = false; $('span', btn).textContent = rot; }
+          if (btn) {
+            btn.disabled = false;
+            btn.removeAttribute('aria-busy');
+            if (rotSpan) rotSpan.textContent = rot;
+          }
         });
     });
   }
 
-  /* ── 10 · ROLAGEM COM COMPENSAÇÃO ──────────────────────────────── */
+  /* ── 07 · ROLAGEM COM COMPENSAÇÃO DO CABEÇALHO ─────────────────── */
 
   $$('a[href^="#"]').forEach(function (a) {
     a.addEventListener('click', function (ev) {
@@ -416,51 +406,36 @@
       var dest = document.querySelector(alvo);
       if (!dest) return;
       ev.preventDefault();
-      var topo = dest.getBoundingClientRect().top + window.scrollY - 66;
-      window.scrollTo({ top: Math.max(0, topo), behavior: calmo ? 'auto' : 'smooth' });
+      var y = dest.getBoundingClientRect().top + window.scrollY - 72;
+      window.scrollTo({ top: Math.max(0, y), behavior: calmo ? 'auto' : 'smooth' });
       if (history.replaceState) history.replaceState(null, '', alvo);
     });
   });
 
+  /* ── 08 · PROJETOS AO VIVO (iframe sob demanda) ────────────────── */
 
-  /* ── 11 · PROJETOS: PRÉVIA VIVA E EXECUÇÃO EMBUTIDA ────────────── */
-
-  // Pausa a deriva e a varredura dos cards fora da tela. Animação que
-  // ninguém vê ainda custa composição — desligar é de graça.
-  var quadros = $$('.proj-img');
-  if (quadros.length && 'IntersectionObserver' in window) {
-    var vigia = new IntersectionObserver(function (ents) {
-      ents.forEach(function (e) { e.target.classList.toggle('fora', !e.isIntersecting); });
-    }, { rootMargin: '120px' });
-    quadros.forEach(function (q) { vigia.observe(q); });
-  }
-
-  // Carrega o projeto de verdade num iframe, só quando pedido.
   $$('.proj-play').forEach(function (botao) {
     var caixa = botao.closest('.proj-img');
     if (!caixa) return;
 
-    var url  = caixa.getAttribute('data-vivo');
-    var nome = caixa.getAttribute('data-nome') || 'projeto';
+    var url    = caixa.getAttribute('data-vivo');
+    var nome   = caixa.getAttribute('data-nome') || 'projeto';
     var rotulo = $('span', botao);
 
     botao.addEventListener('click', function () {
-      var vivo = caixa.classList.contains('ao-vivo');
-
-      if (vivo) {
-        // desliga: remove o iframe para devolver memória e CPU
+      if (caixa.classList.contains('ao-vivo')) {
         var f = $('.proj-quadro', caixa);
         var c = $('.proj-carregando', caixa);
         if (f) f.remove();
         if (c) c.remove();
         caixa.classList.remove('ao-vivo');
-        rotulo.textContent = 'RODAR AO VIVO';
+        rotulo.textContent = 'Ver ao vivo';
         return;
       }
 
       var aviso = document.createElement('div');
       aviso.className = 'proj-carregando';
-      aviso.textContent = 'INICIANDO ' + nome.toUpperCase() + '…';
+      aviso.textContent = 'Abrindo ' + nome + '…';
 
       var frame = document.createElement('iframe');
       frame.className = 'proj-quadro';
@@ -474,7 +449,7 @@
       caixa.appendChild(aviso);
       caixa.appendChild(frame);
       caixa.classList.add('ao-vivo');
-      rotulo.textContent = 'PARAR';
+      rotulo.textContent = 'Fechar';
     });
   });
 

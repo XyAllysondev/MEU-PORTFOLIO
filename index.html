@@ -3,662 +3,551 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Allyson Vinícius — Engenheiro de Computação, desenvolvedor front-end e suporte de TI. Sistema de portfólio v2.6" />
+  <meta name="description" content="Allyson Vinícius — Engenheiro de Computação em formação, desenvolvedor front-end e suporte de TI em Recife. Interfaces feitas à mão e sistemas que ficam de pé." />
   <meta name="author" content="Allyson Vinícius" />
-  <meta name="theme-color" content="#05070c" />
-  <title>Allyson Vinícius — Sistema v2.6</title>
+  <meta name="theme-color" content="#f6f4fb" />
+  <title>Allyson Vinícius — Front-end &amp; TI</title>
 
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Allyson Vinícius — Sistema v2.6" />
+  <meta property="og:title" content="Allyson Vinícius — Front-end &amp; TI" />
   <meta property="og:description" content="Engenharia da Computação · Front-end · Infraestrutura" />
-  <meta property="og:image" content="assets/img/perfil.jpg" />
+  <meta property="og:image" content="assets/videos/allyson-office-poster.jpg" />
+  <meta property="og:url" content="https://xyallysondev.github.io/MEU-PORTFOLIO/" />
   <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href="https://xyallysondev.github.io/MEU-PORTFOLIO/" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%2305070c'/%3E%3Crect x='22' y='30' width='56' height='42' rx='12' fill='none' stroke='%2322e1ff' stroke-width='6'/%3E%3Ccircle cx='40' cy='51' r='5' fill='%2322e1ff'/%3E%3Ccircle cx='60' cy='51' r='5' fill='%2322e1ff'/%3E%3Cpath d='M50 30V16' stroke='%2322e1ff' stroke-width='6'/%3E%3Ccircle cx='50' cy='12' r='7' fill='%239dff5a'/%3E%3C/svg%3E" />
-
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238b5cf6'/%3E%3Cstop offset='1' stop-color='%23c084fc'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='24' fill='url(%23g)'/%3E%3Ctext x='50' y='66' font-family='Arial Black,Arial' font-weight='900' font-size='48' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+  <link rel="preload" as="image" href="assets/videos/allyson-office-poster.jpg" />
   <link rel="stylesheet" href="assets/css/style.css" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Allyson Vinícius",
+    "jobTitle": "Desenvolvedor Front-End / Suporte de TI",
+    "email": "mailto:allysonfulldev@gmail.com",
+    "url": "https://xyallysondev.github.io/MEU-PORTFOLIO/",
+    "image": "assets/img/perfil.jpg",
+    "address": { "@type": "PostalAddress", "addressLocality": "Recife", "addressRegion": "PE", "addressCountry": "BR" },
+    "sameAs": [
+      "https://www.linkedin.com/in/allyson-nonardo-5b4b82323/",
+      "https://github.com/XyAllysondev",
+      "https://instagram.com/allyson_nonardo"
+    ]
+  }
+  </script>
 </head>
 <body>
 
-  <!-- ▚▚ CAMADAS DE AMBIENTE ▚▚ -->
-  <div class="grid-bg" aria-hidden="true"><span id="grid-plane"></span></div>
-  <div class="scanlines" aria-hidden="true"></div>
-  <div class="vinheta" aria-hidden="true"></div>
+  <div class="fundo" aria-hidden="true">
+    <span class="blob blob-1"></span>
+    <span class="blob blob-2"></span>
+    <span class="blob blob-3"></span>
 
-  <!-- ▚▚ MIRA DO MOUSE — um elemento só, movido por transform ▚▚ -->
-  <div class="reticula" id="reticula" aria-hidden="true"><i></i></div>
+    <svg class="simbolo" id="simbolo" viewBox="0 0 600 600" fill="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="sg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#6d3df5"/>
+          <stop offset=".6" stop-color="#c084fc"/>
+          <stop offset="1" stop-color="#f472b6"/>
+        </linearGradient>
+        <radialGradient id="sh">
+          <stop offset="0" stop-color="#c4b5fd" stop-opacity=".55"/>
+          <stop offset="1" stop-color="#c4b5fd" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
 
-  <!-- ▚▚ BOOT ▚▚ -->
-  <div class="boot" id="boot" aria-hidden="true">
-    <pre class="boot-log" id="boot-log"></pre>
-    <div class="boot-barra"><i id="boot-fill"></i></div>
+      <circle cx="300" cy="300" r="290" fill="url(#sh)"/>
+
+      <g class="sim-anel sim-anel-1">
+        <circle cx="300" cy="300" r="272" stroke="url(#sg)" stroke-width="1.5" stroke-dasharray="3 13" stroke-linecap="round"/>
+      </g>
+      <g class="sim-anel sim-anel-2">
+        <circle cx="300" cy="300" r="236" stroke="url(#sg)" stroke-width="2" stroke-dasharray="180 120 40 120" stroke-linecap="round"/>
+        <circle class="sim-no" cx="300" cy="64" r="5" fill="#8b5cf6"/>
+        <circle class="sim-no" cx="536" cy="300" r="4" fill="#c084fc"/>
+      </g>
+      <g class="sim-anel sim-anel-3">
+        <circle cx="300" cy="300" r="204" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="1 9" opacity=".7"/>
+      </g>
+
+      <g class="sim-hex">
+        <path d="M300 96 L478 199 V401 L300 504 L122 401 V199 Z" stroke="url(#sg)" stroke-width="1.5" opacity=".55"/>
+      </g>
+
+      <g class="sim-a">
+        <path class="sim-traco sim-traco-1" d="M166 440 L300 150 L434 440" stroke="url(#sg)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/>
+        <path class="sim-traco sim-traco-2" d="M214 336 H386" stroke="url(#sg)" stroke-width="14" stroke-linecap="round" pathLength="1"/>
+        <circle class="sim-no" cx="300" cy="150" r="9" fill="#fff" stroke="url(#sg)" stroke-width="4"/>
+        <circle class="sim-no" cx="166" cy="440" r="7" fill="#fff" stroke="url(#sg)" stroke-width="4"/>
+        <circle class="sim-no" cx="434" cy="440" r="7" fill="#fff" stroke="url(#sg)" stroke-width="4"/>
+      </g>
+
+      <g class="sim-cod" font-family="Sora, sans-serif" font-weight="700" font-size="44" fill="#8b5cf6" opacity=".35">
+        <text x="52" y="316">&lt;</text>
+        <text x="518" y="316">/&gt;</text>
+      </g>
+    </svg>
   </div>
 
-  <div class="progresso" id="progresso" aria-hidden="true"></div>
+  <a class="pular" href="#sobre">Pular para o conteúdo</a>
 
-  <!-- ▚▚ BARRA DE SISTEMA ▚▚ -->
-  <header class="hud" id="hud">
-    <a href="#" class="hud-marca">
-      <svg viewBox="0 0 40 40" width="26" height="26" aria-hidden="true">
-        <rect x="8" y="12" width="24" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2.5"/>
-        <circle cx="16" cy="21" r="2.2" fill="currentColor"/>
-        <circle cx="24" cy="21" r="2.2" fill="currentColor"/>
-        <path d="M20 12V6" stroke="currentColor" stroke-width="2.5"/>
-        <circle cx="20" cy="4" r="3" fill="currentColor"/>
-      </svg>
-      <span>ALLYSON<b>_V</b></span>
+  <header class="topo" id="topo">
+    <a href="#" class="marca" aria-label="Início">
+      <span class="marca-ico">A</span>
+      <span>Allyson<b>.</b></span>
     </a>
 
-    <nav class="hud-nav" aria-label="Módulos">
-      <a href="#perfil"><i>01</i>PERFIL</a>
-      <a href="#stack"><i>02</i>STACK</a>
-      <a href="#projetos"><i>03</i>PROJETOS</a>
-      <a href="#registro"><i>04</i>REGISTRO</a>
-      <a href="#certificacoes"><i>05</i>CERTIF</a>
-      <a href="#contato"><i>06</i>UPLINK</a>
+    <nav class="menu" aria-label="Seções">
+      <a href="#sobre">Sobre</a>
+      <a href="#stack">Stack</a>
+      <a href="#projetos">Projetos</a>
+      <a href="#experiencia">Experiência</a>
+      <a href="#certificados">Certificados</a>
     </nav>
 
-    <div class="hud-status">
-      <span class="led"><i></i>ONLINE</span>
-      <span class="relogio" id="relogio">--:--:--</span>
-      <button class="hud-burger" id="burger" aria-label="Abrir menu" aria-expanded="false">
-        <span></span><span></span><span></span>
+    <div class="topo-acoes">
+      <a href="#contato" class="btn btn-cheio btn-p">Vamos conversar</a>
+      <button class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu-movel">
+        <span></span><span></span>
       </button>
     </div>
   </header>
 
-  <!-- ▚▚ MENU MÓVEL ▚▚ -->
-  <div class="painel-menu" id="menu" aria-hidden="true" inert>
-    <nav>
-      <a href="#perfil"><i>01</i>PERFIL</a>
-      <a href="#stack"><i>02</i>STACK</a>
-      <a href="#projetos"><i>03</i>PROJETOS</a>
-      <a href="#registro"><i>04</i>REGISTRO</a>
-      <a href="#certificacoes"><i>05</i>CERTIFICAÇÕES</a>
-      <a href="#contato"><i>06</i>UPLINK</a>
+  <div class="menu-movel" id="menu-movel" aria-hidden="true" inert>
+    <nav aria-label="Seções">
+      <a href="#sobre">Sobre</a>
+      <a href="#stack">Stack</a>
+      <a href="#projetos">Projetos</a>
+      <a href="#experiencia">Experiência</a>
+      <a href="#certificados">Certificados</a>
+      <a href="#contato" class="destaque">Contato</a>
     </nav>
-    <div class="painel-menu-pe">
-      <span>allysonfulldev@gmail.com</span>
-      <span>(81) 98225-3788</span>
+    <div class="menu-movel-pe">
+      <a href="mailto:allysonfulldev@gmail.com">allysonfulldev@gmail.com</a>
+      <a href="https://wa.me/5581982253788" target="_blank" rel="noopener">(81) 98225-3788</a>
     </div>
   </div>
 
   <main>
 
-    <!-- ▚▚ HERO ▚▚ -->
-    <section class="hero">
+    <section class="hero" id="inicio">
       <div class="hero-txt">
-        <div class="chip"><i></i>SISTEMA ONLINE · DISPONÍVEL PARA CONTRATO</div>
+        <span class="pill"><i></i>Disponível para novos projetos</span>
 
-        <h1 class="titulo" data-txt="ALLYSON VINÍCIUS">ALLYSON VINÍCIUS</h1>
+        <h1>
+          Olá, eu sou o<br />
+          <span class="grad">Allyson.</span>
+        </h1>
 
-        <p class="subtitulo">
-          <span class="mono-acc" aria-hidden="true">&gt;</span>
-          <span id="digita" aria-hidden="true">desenvolvedor front-end</span
-          ><span class="caret" aria-hidden="true"></span>
-          <span class="so-leitor">Engenharia da computação, desenvolvedor front-end, suporte de TI e redes.</span>
-        </p>
-
-        <p class="hero-desc">
-          Engenharia da Computação, front-end e infraestrutura. Escrevo interfaces
-          do zero e mantenho de pé os sistemas que rodam por trás delas.
+        <p class="hero-lede">
+          Desenvolvedor <strong>front-end</strong> e <strong>suporte de TI</strong>, estudante de
+          Engenharia da Computação em Recife. Escrevo interfaces do zero e mantenho
+          de pé os sistemas que rodam por trás delas.
         </p>
 
         <div class="hero-btns">
-          <a href="#projetos" class="btn btn-forte">
-            <span>VER PROJETOS</span>
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <a href="#projetos" class="btn btn-cheio">
+            Ver projetos
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-          <a href="#contato" class="btn">
-            <span>ABRIR CANAL</span>
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v12H8l-4 4z"/></svg>
+          <a href="#contato" class="btn btn-vidro">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Falar comigo
           </a>
         </div>
 
-        <dl class="hero-tele">
-          <div><dt>LOCAL</dt><dd>Recife · PE</dd></div>
-          <div><dt>FUNÇÃO</dt><dd>Front-end / TI</dd></div>
-          <div><dt>UPTIME</dt><dd>2+ anos</dd></div>
-          <div><dt>STATUS</dt><dd class="ok">Aceitando</dd></div>
-        </dl>
+        <ul class="hero-fatos" aria-label="Resumo">
+          <li><b data-conta="2">2</b><span>anos de<br />experiência</span></li>
+          <li><b data-conta="3">3</b><span>projetos<br />entregues</span></li>
+          <li><b data-conta="11">11</b><span>certificados<br />concluídos</span></li>
+        </ul>
       </div>
 
-      <!-- ▚▚ UNIDADE ROBÓTICA — segue o cursor ▚▚ -->
-      <div class="bot-area" id="bot-area">
-        <div class="bot-balao" id="bot-balao" aria-hidden="true"><span id="bot-fala">Olá.</span></div>
+      <div class="hero-video">
+        <figure class="video-card">
+          <video
+            id="video-hero"
+            autoplay muted loop playsinline
+            preload="metadata"
+            poster="assets/videos/allyson-office-poster.jpg"
+            aria-label="Animação 3D de Allyson caminhando por um escritório com o notebook na mão">
+            <source src="assets/videos/allyson-office.webm" type="video/webm" />
+            <source src="assets/videos/allyson-office.mp4" type="video/mp4" />
+          </video>
+          <button class="video-toggle" id="video-toggle" type="button" aria-label="Pausar vídeo" aria-pressed="false">
+            <svg class="ico-pausa" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+            <svg class="ico-play" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M7 5l12 7-12 7z"/></svg>
+          </button>
+        </figure>
 
-        <svg class="bot" id="bot" viewBox="0 0 360 440" role="presentation" aria-hidden="true" focusable="false">
-          <defs>
-            <linearGradient id="gChassi" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#1b2534"/>
-              <stop offset="1" stop-color="#0c121c"/>
-            </linearGradient>
-            <radialGradient id="gNucleo">
-              <stop offset="0" stop-color="#9dff5a"/>
-              <stop offset="1" stop-color="#9dff5a" stop-opacity="0"/>
-            </radialGradient>
-            <filter id="fBrilho" x="-60%" y="-60%" width="220%" height="220%">
-              <feGaussianBlur stdDeviation="6" result="b"/>
-              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-          </defs>
-
-          <!-- sombra de apoio -->
-          <ellipse class="bot-sombra" cx="180" cy="418" rx="86" ry="11"/>
-
-          <g class="bot-flutua">
-
-            <!-- braços -->
-            <g class="bot-braco-e">
-              <rect x="60" y="272" width="26" height="76" rx="13" fill="url(#gChassi)" stroke="#22e1ff" stroke-width="2"/>
-              <circle cx="73" cy="352" r="12" fill="#0c121c" stroke="#22e1ff" stroke-width="2"/>
-            </g>
-            <g class="bot-braco-d">
-              <rect x="274" y="272" width="26" height="76" rx="13" fill="url(#gChassi)" stroke="#22e1ff" stroke-width="2"/>
-              <circle cx="287" cy="352" r="12" fill="#0c121c" stroke="#22e1ff" stroke-width="2"/>
-            </g>
-
-            <!-- corpo -->
-            <g class="bot-corpo">
-              <rect x="96" y="262" width="168" height="118" rx="30" fill="url(#gChassi)" stroke="#22e1ff" stroke-width="2.5"/>
-              <rect x="120" y="286" width="120" height="6" rx="3" fill="#22e1ff" opacity=".22"/>
-              <circle cx="180" cy="330" r="34" fill="url(#gNucleo)" opacity=".55"/>
-              <circle class="bot-nucleo" cx="180" cy="330" r="17" fill="none" stroke="#9dff5a" stroke-width="3"/>
-              <circle cx="180" cy="330" r="6" fill="#9dff5a"/>
-            </g>
-
-            <!-- pescoço -->
-            <rect x="163" y="238" width="34" height="30" rx="10" fill="#0c121c" stroke="#22e1ff" stroke-width="2"/>
-
-            <!-- cabeça -->
-            <g class="bot-cabeca" id="bot-cabeca">
-              <!-- antena -->
-              <g class="bot-antena">
-                <path d="M180 96V52" stroke="#22e1ff" stroke-width="4" stroke-linecap="round"/>
-                <circle class="bot-lampada" cx="180" cy="42" r="11" fill="#9dff5a" filter="url(#fBrilho)"/>
-              </g>
-
-              <!-- orelhas -->
-              <rect x="62" y="150" width="20" height="52" rx="9" fill="url(#gChassi)" stroke="#22e1ff" stroke-width="2"/>
-              <rect x="278" y="150" width="20" height="52" rx="9" fill="url(#gChassi)" stroke="#22e1ff" stroke-width="2"/>
-
-              <!-- crânio -->
-              <rect x="80" y="96" width="200" height="152" rx="42" fill="url(#gChassi)" stroke="#22e1ff" stroke-width="2.5"/>
-
-              <!-- visor -->
-              <rect x="102" y="122" width="156" height="100" rx="34" fill="#04070d" stroke="#22e1ff" stroke-width="1.5" opacity=".95"/>
-
-              <!-- olhos -->
-              <g class="bot-olhos" id="bot-olhos">
-                <g class="bot-olho">
-                  <circle cx="146" cy="168" r="20" fill="#0a1420"/>
-                  <circle class="bot-pupila" cx="146" cy="168" r="11" fill="#22e1ff" filter="url(#fBrilho)"/>
-                </g>
-                <g class="bot-olho">
-                  <circle cx="214" cy="168" r="20" fill="#0a1420"/>
-                  <circle class="bot-pupila" cx="214" cy="168" r="11" fill="#22e1ff" filter="url(#fBrilho)"/>
-                </g>
-              </g>
-
-              <!-- boca -->
-              <path class="bot-boca" id="bot-boca" d="M156 200h48" stroke="#22e1ff" stroke-width="4" stroke-linecap="round" fill="none"/>
-            </g>
-          </g>
-        </svg>
-
-        <!-- telemetria decorativa: #bot-coord muda a cada mousemove -->
-        <div class="bot-legenda" aria-hidden="true">
-          <span class="mono-acc">UNIDADE_AV-01</span>
-          <span id="bot-coord">RASTREANDO CURSOR…</span>
+        <div class="flutua flutua-1" aria-hidden="true">
+          <span class="flutua-ico" style="--c:#8b5cf6">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg>
+          </span>
+          <span><b>Front-end</b><small>HTML · CSS · JS · React</small></span>
+        </div>
+        <div class="flutua flutua-2" aria-hidden="true">
+          <span class="flutua-ico" style="--c:#0ea5a4">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          </span>
+          <span><b>Suporte de TI</b><small>Redes · Hardware · Server</small></span>
+        </div>
+        <div class="flutua flutua-3" aria-hidden="true">
+          <span class="flutua-ico" style="--c:#f59e0b">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </span>
+          <span><b>Eng. Computação</b><small>UniFG · em andamento</small></span>
         </div>
       </div>
     </section>
 
-    <!-- ▚▚ FAIXA DE DADOS ▚▚ -->
     <div class="faixa" aria-hidden="true">
       <div class="faixa-run">
-        <span>HTML5</span><i>//</i><span>CSS3</span><i>//</i><span>JAVASCRIPT</span><i>//</i><span>TYPESCRIPT</span><i>//</i><span>REACT</span><i>//</i><span>PYTHON</span><i>//</i><span>GIT</span><i>//</i><span>LINUX</span><i>//</i><span>FIGMA</span><i>//</i><span>REDES</span><i>//</i><span>WINDOWS SERVER</span><i>//</i>
-        <span>HTML5</span><i>//</i><span>CSS3</span><i>//</i><span>JAVASCRIPT</span><i>//</i><span>TYPESCRIPT</span><i>//</i><span>REACT</span><i>//</i><span>PYTHON</span><i>//</i><span>GIT</span><i>//</i><span>LINUX</span><i>//</i><span>FIGMA</span><i>//</i><span>REDES</span><i>//</i><span>WINDOWS SERVER</span><i>//</i>
+        <span>HTML5</span><span>CSS3</span><span>JavaScript</span><span>TypeScript</span><span>React</span><span>Python</span><span>Git</span><span>Linux</span><span>Figma</span><span>Redes</span><span>Windows Server</span>
+        <span>HTML5</span><span>CSS3</span><span>JavaScript</span><span>TypeScript</span><span>React</span><span>Python</span><span>Git</span><span>Linux</span><span>Figma</span><span>Redes</span><span>Windows Server</span>
       </div>
     </div>
 
-    <!-- ▚▚ 01 PERFIL ▚▚ -->
-    <section id="perfil" class="modulo">
-      <div class="modulo-cab">
-        <span class="modulo-id">SYS.01</span>
-        <h2>PERFIL</h2>
-        <span class="modulo-linha"></span>
-        <span class="modulo-tag">/ operador</span>
+    <section id="sobre" class="secao">
+      <div class="secao-cab revela">
+        <span class="rotulo">Sobre mim</span>
+        <h2>Pensar em sistemas antes de pensar em código.</h2>
       </div>
 
-      <div class="perfil-grid">
-        <div class="painel foto-painel revela">
-          <img src="assets/img/perfil.jpg" alt="Allyson Vinícius" width="600" height="700"
-               onerror="this.closest('.foto-painel').remove()" />
-          <span class="foto-mira"></span>
-          <div class="foto-dados">
-            <span>ID · AV-2026</span>
-            <span>RECIFE / BR</span>
-          </div>
-        </div>
+      <div class="bento">
+        <figure class="card card-foto revela">
+          <img src="assets/img/perfil.jpg" alt="Allyson Vinícius de perfil, com um anel de luz azul ao fundo" width="600" height="600" loading="lazy" />
+          <figcaption><span>Allyson Vinícius</span><small>Recife · PE</small></figcaption>
+        </figure>
 
-        <div class="perfil-txt">
-          <p class="revela">
+        <div class="card card-texto revela">
+          <p>
             Comecei mexendo no que quebrava — computador travado, rede caindo,
-            sistema fora do ar. Resolver aquilo me ensinou a <strong>pensar em
-            sistemas antes de pensar em código</strong>.
+            sistema fora do ar. Resolver aquilo me ensinou a <strong>entender o
+            todo antes de tocar nas partes</strong>.
           </p>
-          <p class="revela">
-            Hoje divido meu tempo entre <strong>suporte de TI</strong>, onde lido com
+          <p>
+            Hoje divido meu tempo entre <strong>suporte de TI</strong>, lidando com
             máquinas, redes e gente sob pressão, e o <strong>desenvolvimento
             front-end</strong>, onde a mesma lógica vira interface.
           </p>
-          <p class="revela">
+          <p>
             Escrevo do zero sempre que dá — sem framework por reflexo, sem
             dependência por preguiça. Se está na tela, eu sei explicar por quê.
           </p>
+        </div>
 
-          <div class="metricas">
-            <div class="metrica revela"><b data-alvo="2">0</b><span>ANOS ATIVO</span></div>
-            <div class="metrica revela"><b data-alvo="10">0</b><span>PROJETOS</span></div>
-            <div class="metrica revela"><b data-alvo="11">0</b><span>CERTIFICADOS</span></div>
-            <div class="metrica revela"><b class="inf">∞</b><span>APRENDIZADO</span></div>
-          </div>
+        <div class="card card-mini revela" style="--i:0">
+          <span class="mini-ico" style="--c:#8b5cf6">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </span>
+          <b>Confiável</b>
+          <small>Sistemas que continuam funcionando depois que eu saio da sala.</small>
+        </div>
+        <div class="card card-mini revela" style="--i:1">
+          <span class="mini-ico" style="--c:#0ea5a4">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </span>
+          <b>Rápido</b>
+          <small>Sem build, sem dependência inútil. Página leve, resposta rápida.</small>
+        </div>
+        <div class="card card-mini revela" style="--i:2">
+          <span class="mini-ico" style="--c:#f59e0b">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </span>
+          <b>Presente</b>
+          <small>Respondo em horas, não em dias. Falar comigo é simples.</small>
         </div>
       </div>
     </section>
 
-    <!-- ▚▚ 02 STACK ▚▚ -->
-    <section id="stack" class="modulo">
-      <div class="modulo-cab">
-        <span class="modulo-id">SYS.02</span>
-        <h2>STACK</h2>
-        <span class="modulo-linha"></span>
-        <span class="modulo-tag">/ diagnóstico</span>
+    <section id="stack" class="secao">
+      <div class="secao-cab revela">
+        <span class="rotulo">Stack</span>
+        <h2>Ferramentas que uso todo dia.</h2>
       </div>
 
-      <div class="diag">
-        <div class="diag-linha revela" data-v="90">
-          <span class="diag-nome">HTML5</span>
-          <span class="diag-uso">semântica · acessibilidade · SEO</span>
-          <span class="diag-barra"><i></i></span>
-          <span class="diag-pct">90</span>
+      <div class="skills">
+        <div class="card skill revela" style="--i:0" data-v="90">
+          <div class="skill-topo"><b>HTML5</b><span>90%</span></div>
+          <small>semântica · acessibilidade · SEO</small>
+          <span class="skill-barra"><i></i></span>
         </div>
-        <div class="diag-linha revela" data-v="88">
-          <span class="diag-nome">CSS3</span>
-          <span class="diag-uso">grid · flexbox · animação</span>
-          <span class="diag-barra"><i></i></span>
-          <span class="diag-pct">88</span>
+        <div class="card skill revela" style="--i:1" data-v="88">
+          <div class="skill-topo"><b>CSS3</b><span>88%</span></div>
+          <small>grid · flexbox · animação</small>
+          <span class="skill-barra"><i></i></span>
         </div>
-        <div class="diag-linha revela" data-v="82">
-          <span class="diag-nome">SUPORTE TI</span>
-          <span class="diag-uso">redes · hardware · Windows Server</span>
-          <span class="diag-barra"><i></i></span>
-          <span class="diag-pct">82</span>
+        <div class="card skill revela" style="--i:2" data-v="82">
+          <div class="skill-topo"><b>Suporte de TI</b><span>82%</span></div>
+          <small>redes · hardware · Windows Server</small>
+          <span class="skill-barra"><i></i></span>
         </div>
-        <div class="diag-linha revela" data-v="78">
-          <span class="diag-nome">JAVASCRIPT</span>
-          <span class="diag-uso">DOM · Canvas · assíncrono</span>
-          <span class="diag-barra"><i></i></span>
-          <span class="diag-pct">78</span>
+        <div class="card skill revela" style="--i:3" data-v="78">
+          <div class="skill-topo"><b>JavaScript</b><span>78%</span></div>
+          <small>DOM · Canvas · assíncrono</small>
+          <span class="skill-barra"><i></i></span>
         </div>
-        <div class="diag-linha revela" data-v="70">
-          <span class="diag-nome">PYTHON</span>
-          <span class="diag-uso">automação · scripts · algoritmos</span>
-          <span class="diag-barra"><i></i></span>
-          <span class="diag-pct">70</span>
+        <div class="card skill revela" style="--i:4" data-v="70">
+          <div class="skill-topo"><b>Python</b><span>70%</span></div>
+          <small>automação · scripts · algoritmos</small>
+          <span class="skill-barra"><i></i></span>
         </div>
-        <div class="diag-linha revela" data-v="66">
-          <span class="diag-nome">REACT</span>
-          <span class="diag-uso">componentes · estado · hooks</span>
-          <span class="diag-barra"><i></i></span>
-          <span class="diag-pct">66</span>
+        <div class="card skill revela" style="--i:5" data-v="66">
+          <div class="skill-topo"><b>React</b><span>66%</span></div>
+          <small>componentes · estado · hooks</small>
+          <span class="skill-barra"><i></i></span>
         </div>
-        <div class="diag-linha revela" data-v="60">
-          <span class="diag-nome">TYPESCRIPT</span>
-          <span class="diag-uso">tipagem · contratos · refatoração</span>
-          <span class="diag-barra"><i></i></span>
-          <span class="diag-pct">60</span>
+        <div class="card skill revela" style="--i:6" data-v="60">
+          <div class="skill-topo"><b>TypeScript</b><span>60%</span></div>
+          <small>tipagem · contratos · refatoração</small>
+          <span class="skill-barra"><i></i></span>
+        </div>
+        <div class="card skill skill-lista revela" style="--i:7">
+          <b>Também no dia a dia</b>
+          <ul class="chips">
+            <li>Git &amp; GitHub</li><li>Linux</li><li>Windows Server</li><li>Figma</li>
+            <li>VS Code</li><li>SQL básico</li><li>Pacote Office</li><li>Responsividade</li>
+          </ul>
         </div>
       </div>
-
-      <ul class="modulos-extra">
-        <li>GIT &amp; GITHUB</li><li>LINUX</li><li>WINDOWS SERVER</li><li>FIGMA</li>
-        <li>VS CODE</li><li>SQL BÁSICO</li><li>PACOTE OFFICE</li><li>RESPONSIVIDADE</li>
-      </ul>
     </section>
 
-    <!-- ▚▚ 03 PROJETOS ▚▚ -->
-    <section id="projetos" class="modulo">
-      <div class="modulo-cab">
-        <span class="modulo-id">SYS.03</span>
-        <h2>PROJETOS</h2>
-        <span class="modulo-linha"></span>
-        <span class="modulo-tag">/ 04 registros</span>
+    <section id="projetos" class="secao">
+      <div class="secao-cab revela">
+        <span class="rotulo">Projetos</span>
+        <h2>Coisas que estão no ar.</h2>
+        <p class="secao-sub">Todos os projetos abaixo rodam de verdade. Clique em <b>ver ao vivo</b> para abrir dentro do card.</p>
       </div>
 
       <div class="projetos">
-        <article class="painel proj revela">
+        <article class="card proj revela" style="--i:0">
           <div class="proj-img" data-vivo="https://sistemaalternativa.netlify.app/" data-nome="ALTERNATIVA">
             <picture>
               <source srcset="assets/img/projeto-alternativa.webp" type="image/webp" />
               <img src="assets/img/projeto-alternativa.png" alt="Tela de login do sistema ALTERNATIVA" loading="lazy" width="1400" height="875" />
             </picture>
-            <span class="proj-varredura"></span>
             <button class="proj-play" type="button">
-              <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>
-              <span>RODAR AO VIVO</span>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>
+              <span>Ver ao vivo</span>
             </button>
           </div>
           <div class="proj-corpo">
-            <div class="proj-topo">
-              <span class="mono-acc">REG_01 · SISTEMA DE GESTÃO · 2026</span>
-              <span class="led"><i></i>EM PRODUÇÃO</span>
-            </div>
+            <div class="proj-meta"><span>Sistema de gestão · 2026</span><span class="status"><i></i>Em produção</span></div>
             <h3>ALTERNATIVA</h3>
             <p>
-              Sistema de gestão de serviços, equipes e resultados. Painel com
-              indicadores em tempo real, mapas com camada de calor por
-              geolocalização, exportação em Excel e PDF, geração de QR code e
-              persistência local em IndexedDB — tudo em JavaScript puro,
-              num app de arquivo único.
+              Gestão de serviços, equipes e resultados. Painel com indicadores em
+              tempo real, mapas com camada de calor, exportação em Excel e PDF, QR
+              code e persistência local em IndexedDB — tudo em JavaScript puro.
             </p>
-            <ul class="proj-tags"><li>JAVASCRIPT</li><li>BOOTSTRAP 5</li><li>CHART.JS</li><li>LEAFLET</li><li>INDEXEDDB</li></ul>
+            <ul class="chips"><li>JavaScript</li><li>Bootstrap 5</li><li>Chart.js</li><li>Leaflet</li><li>IndexedDB</li></ul>
             <div class="proj-links">
-              <a href="https://sistemaalternativa.netlify.app/" target="_blank" rel="noopener" class="btn btn-forte">
-                <span>ACESSAR</span>
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              <a href="https://sistemaalternativa.netlify.app/" target="_blank" rel="noopener" class="btn btn-cheio btn-p">Acessar
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
               </a>
             </div>
           </div>
         </article>
 
-        <article class="painel proj revela">
-          <div class="proj-img marca" style="--marca-bg:#131313" data-vivo="https://playnexusrpg.com/" data-nome="Nexus RPG">
-            <!-- Sem captura de tela, a capa é a marca do projeto (.marca).
-                 Se nem a marca carregar, cai para a placa .sem-sinal em
-                 vez do ícone de imagem quebrada. A variável marca-bg
-                 acompanha o fundo da arte para não deixar emenda. -->
-            <img src="assets/img/projeto-nexus.png"
-                 alt="Nexus RPG — mesa virtual para Ordem Paranormal"
-                 loading="lazy" width="512" height="512"
-                 onerror="this.onerror=null;this.closest('.proj-img').classList.add('sem-sinal')" />
-            <span class="proj-varredura"></span>
+        <article class="card proj revela" style="--i:1">
+          <div class="proj-img proj-marca" data-vivo="https://playnexusrpg.com/" data-nome="Nexus RPG">
+            <img src="assets/img/projeto-nexus.png" alt="Nexus RPG — mesa virtual para Ordem Paranormal" loading="lazy" width="512" height="512" />
             <button class="proj-play" type="button">
-              <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>
-              <span>RODAR AO VIVO</span>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>
+              <span>Ver ao vivo</span>
             </button>
           </div>
           <div class="proj-corpo">
-            <div class="proj-topo">
-              <span class="mono-acc">REG_02 · APP DE RPG · 2026</span>
-              <span class="led"><i></i>NO AR</span>
-            </div>
+            <div class="proj-meta"><span>App de RPG · 2026</span><span class="status"><i></i>No ar</span></div>
             <h3>Nexus RPG</h3>
             <p>
               Mesa virtual para Ordem Paranormal: ficha online com progressão
-              automática pelo livro, editor de mapas com névoa de guerra e
-              ajudante do mestre. Aplicativo React instalável (PWA), com
-              domínio próprio e hospedagem no Firebase.
+              automática pelo livro, editor de mapas com névoa de guerra e ajudante
+              do mestre. React instalável (PWA), domínio próprio, Firebase.
             </p>
-            <ul class="proj-tags"><li>REACT</li><li>PWA</li><li>FIREBASE</li><li>CANVAS</li></ul>
+            <ul class="chips"><li>React</li><li>PWA</li><li>Firebase</li><li>Canvas</li></ul>
             <div class="proj-links">
-              <a href="https://playnexusrpg.com/" target="_blank" rel="noopener" class="btn btn-forte">
-                <span>ABRIR MESA</span>
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              <a href="https://playnexusrpg.com/" target="_blank" rel="noopener" class="btn btn-cheio btn-p">Abrir mesa
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
               </a>
             </div>
           </div>
         </article>
 
-        <article class="painel proj revela">
-          <div class="proj-img" data-vivo="https://a-0-anime-version.web.app/" data-nome="7 a 0 - Anime Version">
+        <article class="card proj revela" style="--i:2">
+          <div class="proj-img" data-vivo="https://a-0-anime-version.web.app/" data-nome="7 a 0 — Anime Version">
             <picture>
               <source srcset="assets/img/projeto1.webp" type="image/webp" />
               <img src="assets/img/projeto1.png" alt="Tela inicial do jogo 7 a 0 — Anime Version" loading="lazy" width="1200" height="750" />
             </picture>
-            <span class="proj-varredura"></span>
             <button class="proj-play" type="button">
-              <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>
-              <span>RODAR AO VIVO</span>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>
+              <span>Ver ao vivo</span>
             </button>
           </div>
           <div class="proj-corpo">
-            <div class="proj-topo">
-              <span class="mono-acc">REG_03 · WEB GAME · 2026</span>
-              <span class="led"><i></i>ATIVO</span>
-            </div>
+            <div class="proj-meta"><span>Web game · 2026</span><span class="status"><i></i>Ativo</span></div>
             <h3>7 a 0 — Anime Version</h3>
             <p>
               Jogo de mesa digital para jogar com amigos: role o dado, escolha
-              personagens de anime e simule o combate contra o time adversário.
-              Turnos, sorteio e cálculo de dano em JavaScript puro.
+              personagens de anime e simule o combate. Turnos, sorteio e cálculo de
+              dano em JavaScript puro.
             </p>
-            <ul class="proj-tags"><li>HTML</li><li>CSS</li><li>JAVASCRIPT</li><li>FIREBASE</li></ul>
+            <ul class="chips"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>Firebase</li></ul>
             <div class="proj-links">
-              <a href="https://a-0-anime-version.web.app/" target="_blank" rel="noopener" class="btn btn-forte">
-                <span>EXECUTAR</span>
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              <a href="https://a-0-anime-version.web.app/" target="_blank" rel="noopener" class="btn btn-cheio btn-p">Jogar
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
               </a>
-              <a href="https://github.com/XyAllysondev/7a0-anime-version" target="_blank" rel="noopener" class="btn">
-                <span>FONTE</span>
-              </a>
+              <a href="https://github.com/XyAllysondev/7a0-anime-version" target="_blank" rel="noopener" class="btn btn-vidro btn-p">Código</a>
             </div>
           </div>
         </article>
 
-        <article class="painel proj revela">
-          <div class="proj-img">
-            <picture>
-              <source srcset="assets/img/projeto2.webp" type="image/webp" />
-              <img src="assets/img/projeto2.png" alt="Portfólio pessoal de Allyson Vinícius" loading="lazy" width="1400" height="875" />
-            </picture>
-            <span class="proj-varredura"></span>
-          </div>
-          <div class="proj-corpo">
-            <div class="proj-topo">
-              <span class="mono-acc">REG_04 · INTERFACE · 2026</span>
-              <span class="led"><i></i>ATIVO</span>
-            </div>
-            <h3>Este sistema</h3>
-            <p>
-              A interface que você está operando. HTML, CSS e JavaScript puro —
-              zero frameworks, zero build. Robô SVG que rastreia o cursor,
-              retícula de mira e revelação por IntersectionObserver.
-            </p>
-            <ul class="proj-tags"><li>HTML5</li><li>CSS3</li><li>SVG</li><li>SEM DEPENDÊNCIAS</li></ul>
-            <div class="proj-links">
-              <a href="https://github.com/XyAllysondev/MEU-PORTFOLIO" target="_blank" rel="noopener" class="btn btn-forte">
-                <span>FONTE</span>
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              </a>
-            </div>
-          </div>
-        </article>
       </div>
     </section>
 
-    <!-- ▚▚ 04 REGISTRO ▚▚ -->
-    <section id="registro" class="modulo">
-      <div class="modulo-cab">
-        <span class="modulo-id">SYS.04</span>
-        <h2>REGISTRO</h2>
-        <span class="modulo-linha"></span>
-        <span class="modulo-tag">/ log de atividade</span>
+    <section id="experiencia" class="secao">
+      <div class="secao-cab revela">
+        <span class="rotulo">Experiência</span>
+        <h2>Por onde passei.</h2>
       </div>
 
-      <div class="trilha">
-        <div class="trilha-item revela">
-          <span class="trilha-no"></span>
-          <div class="painel trilha-cx">
-            <span class="mono-acc">2025 — 2026</span>
-            <h3>Auxiliar Administrativo &amp; Suporte de TI</h3>
-            <span class="trilha-org">EMPRESA CONFIDENCIAL</span>
-            <p>Atendimento técnico a usuários, manutenção de equipamentos, gestão de redes locais e apoio a processos administrativos em sistemas internos.</p>
-          </div>
-        </div>
-
-        <div class="trilha-item revela">
-          <span class="trilha-no"></span>
-          <div class="painel trilha-cx">
-            <span class="mono-acc">2025 — PRESENTE</span>
-            <h3>Desenvolvedor Front-End · Freelance</h3>
-            <span class="trilha-org">PROJETOS PRÓPRIOS E CLIENTES</span>
-            <p>Interfaces web responsivas, landing pages e pequenos sistemas, com atenção a performance, semântica e experiência de uso.</p>
-          </div>
-        </div>
-
-        <div class="trilha-item revela">
-          <span class="trilha-no"></span>
-          <div class="painel trilha-cx">
-            <span class="mono-acc">2025 — PRESENTE</span>
-            <h3>Bacharelado em Engenharia da Computação</h3>
-            <span class="trilha-org">UNIFG — CENTRO UNIVERSITÁRIO FG</span>
-            <p>Algoritmos, estruturas de dados, sistemas operacionais, redes, banco de dados e engenharia de software.</p>
-          </div>
-        </div>
-      </div>
+      <ol class="linha-tempo">
+        <li class="card lt-item revela" style="--i:0">
+          <span class="lt-quando">2025 — 2026</span>
+          <h3>Auxiliar Administrativo &amp; Suporte de TI</h3>
+          <span class="lt-onde">Empresa confidencial</span>
+          <p>Atendimento técnico a usuários, manutenção de equipamentos, gestão de redes locais e apoio a processos administrativos em sistemas internos.</p>
+        </li>
+        <li class="card lt-item revela" style="--i:1">
+          <span class="lt-quando">2025 — presente</span>
+          <h3>Desenvolvedor Front-End · Freelance</h3>
+          <span class="lt-onde">Projetos próprios e clientes</span>
+          <p>Interfaces web responsivas, landing pages e pequenos sistemas, com atenção a performance, semântica e experiência de uso.</p>
+        </li>
+        <li class="card lt-item revela" style="--i:2">
+          <span class="lt-quando">2025 — presente</span>
+          <h3>Bacharelado em Engenharia da Computação</h3>
+          <span class="lt-onde">UniFG — Centro Universitário FG</span>
+          <p>Algoritmos, estruturas de dados, sistemas operacionais, redes, banco de dados e engenharia de software.</p>
+        </li>
+      </ol>
     </section>
 
-    <!-- ▚▚ 05 CERTIFICAÇÕES ▚▚ -->
-    <section id="certificacoes" class="modulo">
-      <div class="modulo-cab">
-        <span class="modulo-id">SYS.05</span>
-        <h2>CERTIFICAÇÕES</h2>
-        <span class="modulo-linha"></span>
-        <span class="modulo-tag">/ 11 validadas</span>
+    <section id="certificados" class="secao">
+      <div class="secao-cab revela">
+        <span class="rotulo">Certificados</span>
+        <h2>11 cursos concluídos.</h2>
       </div>
 
       <div class="certs">
-        <a class="cert revela" href="assets/certs/formacao-logica-programacao.pdf" target="_blank" rel="noopener">
-          <span class="cert-ok">✓</span>
-          <span class="cert-nome">Formação em Lógica de Programação</span>
-          <span class="cert-org">DIO.PRO · 41H</span>
+        <a class="card cert revela" style="--i:0" href="assets/certs/formacao-logica-programacao.pdf" target="_blank" rel="noopener">
+          <span class="cert-ok"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg></span>
+          <b>Formação em Lógica de Programação</b><small>DIO · 41h</small>
         </a>
-        <a class="cert revela" href="assets/certs/jovem-aprendiz-espro.pdf" target="_blank" rel="noopener">
-          <span class="cert-ok">✓</span>
-          <span class="cert-nome">Gestão, Qualidade, Atendimento e Serviços</span>
-          <span class="cert-org">ESPRO · 1.956H</span>
+        <a class="card cert revela" style="--i:1" href="assets/certs/jovem-aprendiz-espro.pdf" target="_blank" rel="noopener">
+          <span class="cert-ok"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg></span>
+          <b>Gestão, Qualidade, Atendimento e Serviços</b><small>ESPRO · 1.956h</small>
         </a>
-        <a class="cert revela" href="assets/certs/excel-2016-avancado.pdf" target="_blank" rel="noopener">
-          <span class="cert-ok">✓</span>
-          <span class="cert-nome">Microsoft Excel 2016 — Avançado</span>
-          <span class="cert-org">BRADESCO · 30H</span>
+        <a class="card cert revela" style="--i:2" href="assets/certs/excel-2016-avancado.pdf" target="_blank" rel="noopener">
+          <span class="cert-ok"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg></span>
+          <b>Microsoft Excel 2016 — Avançado</b><small>Bradesco · 30h</small>
         </a>
-        <a class="cert revela" href="assets/certs/word-2016-avancado.pdf" target="_blank" rel="noopener">
-          <span class="cert-ok">✓</span>
-          <span class="cert-nome">Microsoft Word 2016 — Avançado</span>
-          <span class="cert-org">BRADESCO · 8H</span>
+        <a class="card cert revela" style="--i:3" href="assets/certs/word-2016-avancado.pdf" target="_blank" rel="noopener">
+          <span class="cert-ok"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg></span>
+          <b>Microsoft Word 2016 — Avançado</b><small>Bradesco · 8h</small>
         </a>
-        <a class="cert revela" href="assets/certs/powerpoint-2016-avancado.pdf" target="_blank" rel="noopener">
-          <span class="cert-ok">✓</span>
-          <span class="cert-nome">Microsoft PowerPoint 2016 — Avançado</span>
-          <span class="cert-org">BRADESCO · 8H</span>
+        <a class="card cert revela" style="--i:4" href="assets/certs/powerpoint-2016-avancado.pdf" target="_blank" rel="noopener">
+          <span class="cert-ok"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg></span>
+          <b>Microsoft PowerPoint 2016 — Avançado</b><small>Bradesco · 8h</small>
         </a>
-        <a class="cert revela" href="assets/certs/inclusividade.pdf" target="_blank" rel="noopener">
-          <span class="cert-ok">✓</span>
-          <span class="cert-nome">Inclusividade</span>
-          <span class="cert-org">BRADESCO · 1H</span>
+        <a class="card cert revela" style="--i:5" href="assets/certs/inclusividade.pdf" target="_blank" rel="noopener">
+          <span class="cert-ok"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg></span>
+          <b>Inclusividade</b><small>Bradesco · 1h</small>
         </a>
-        <a class="cert revela" href="assets/certs/microsoft365-outlook.pdf" target="_blank" rel="noopener">
-          <span class="cert-ok">✓</span>
-          <span class="cert-nome">Microsoft 365 — Outlook</span>
-          <span class="cert-org">BRADESCO · 1H</span>
+        <a class="card cert revela" style="--i:6" href="assets/certs/microsoft365-outlook.pdf" target="_blank" rel="noopener">
+          <span class="cert-ok"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg></span>
+          <b>Microsoft 365 — Outlook</b><small>Bradesco · 1h</small>
         </a>
-        <a class="cert revela" href="assets/certs/microsoft365-teams.pdf" target="_blank" rel="noopener">
-          <span class="cert-ok">✓</span>
-          <span class="cert-nome">Microsoft 365 — Teams</span>
-          <span class="cert-org">BRADESCO · 1H</span>
+        <a class="card cert revela" style="--i:7" href="assets/certs/microsoft365-teams.pdf" target="_blank" rel="noopener">
+          <span class="cert-ok"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg></span>
+          <b>Microsoft 365 — Teams</b><small>Bradesco · 1h</small>
         </a>
-        <a class="cert revela" href="assets/certs/microsoft365-onedrive.pdf" target="_blank" rel="noopener">
-          <span class="cert-ok">✓</span>
-          <span class="cert-nome">Microsoft 365 — OneDrive</span>
-          <span class="cert-org">BRADESCO · 1H</span>
+        <a class="card cert revela" style="--i:8" href="assets/certs/microsoft365-onedrive.pdf" target="_blank" rel="noopener">
+          <span class="cert-ok"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg></span>
+          <b>Microsoft 365 — OneDrive</b><small>Bradesco · 1h</small>
         </a>
-        <a class="cert revela" href="assets/certs/microsoft365-onenote.pdf" target="_blank" rel="noopener">
-          <span class="cert-ok">✓</span>
-          <span class="cert-nome">Microsoft 365 — OneNote</span>
-          <span class="cert-org">BRADESCO · 1H</span>
+        <a class="card cert revela" style="--i:9" href="assets/certs/microsoft365-onenote.pdf" target="_blank" rel="noopener">
+          <span class="cert-ok"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg></span>
+          <b>Microsoft 365 — OneNote</b><small>Bradesco · 1h</small>
         </a>
-        <a class="cert revela" href="assets/certs/microsoft365-planner.pdf" target="_blank" rel="noopener">
-          <span class="cert-ok">✓</span>
-          <span class="cert-nome">Microsoft 365 — Planner</span>
-          <span class="cert-org">BRADESCO · 1H</span>
+        <a class="card cert revela" style="--i:10" href="assets/certs/microsoft365-planner.pdf" target="_blank" rel="noopener">
+          <span class="cert-ok"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg></span>
+          <b>Microsoft 365 — Planner</b><small>Bradesco · 1h</small>
         </a>
       </div>
     </section>
 
-    <!-- ▚▚ 06 UPLINK ▚▚ -->
-    <section id="contato" class="modulo">
-      <div class="modulo-cab">
-        <span class="modulo-id">SYS.06</span>
-        <h2>UPLINK</h2>
-        <span class="modulo-linha"></span>
-        <span class="modulo-tag">/ canal aberto</span>
-      </div>
+    <section id="contato" class="secao">
+      <div class="contato-grid">
+        <div class="contato-txt revela">
+          <span class="rotulo">Contato</span>
+          <h2>Vamos construir algo juntos?</h2>
+          <p class="secao-sub">Projeto, vaga, freela ou só uma ideia. Me manda uma mensagem — respondo em horas.</p>
 
-      <div class="uplink">
-        <div class="canais">
-          <a class="canal revela" href="mailto:allysonfulldev@gmail.com">
-            <span class="canal-tipo">E-MAIL</span>
-            <span class="canal-end">allysonfulldev@gmail.com</span>
-            <span class="canal-seta">→</span>
-          </a>
-          <a class="canal revela" href="https://wa.me/5581982253788" target="_blank" rel="noopener">
-            <span class="canal-tipo">WHATSAPP</span>
-            <span class="canal-end">(81) 98225-3788</span>
-            <span class="canal-seta">→</span>
-          </a>
-          <a class="canal revela" href="https://www.linkedin.com/in/allyson-nonardo-5b4b82323/" target="_blank" rel="noopener">
-            <span class="canal-tipo">LINKEDIN</span>
-            <span class="canal-end">allyson-nonardo</span>
-            <span class="canal-seta">→</span>
-          </a>
-          <a class="canal revela" href="https://github.com/XyAllysondev" target="_blank" rel="noopener">
-            <span class="canal-tipo">GITHUB</span>
-            <span class="canal-end">@XyAllysondev</span>
-            <span class="canal-seta">→</span>
-          </a>
-          <a class="canal revela" href="https://instagram.com/allyson_nonardo" target="_blank" rel="noopener">
-            <span class="canal-tipo">INSTAGRAM</span>
-            <span class="canal-end">@allyson_nonardo</span>
-            <span class="canal-seta">→</span>
-          </a>
+          <ul class="canais">
+            <li><a href="mailto:allysonfulldev@gmail.com">
+              <span class="canal-ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m2 7 10 7 10-7"/></svg></span>
+              <span><small>E-mail</small><b>allysonfulldev@gmail.com</b></span>
+            </a></li>
+            <li><a href="https://wa.me/5581982253788" target="_blank" rel="noopener">
+              <span class="canal-ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8.1 9.7a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.8 2z"/></svg></span>
+              <span><small>WhatsApp</small><b>(81) 98225-3788</b></span>
+            </a></li>
+            <li><a href="https://www.linkedin.com/in/allyson-nonardo-5b4b82323/" target="_blank" rel="noopener">
+              <span class="canal-ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M20.4 20.5h-3.6v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9v5.7H9.3V9h3.4v1.6h.1c.5-.9 1.6-1.8 3.4-1.8 3.6 0 4.3 2.4 4.3 5.5v6.2zM5.3 7.4a2.1 2.1 0 1 1 0-4.2 2.1 2.1 0 0 1 0 4.2zM7.1 20.5H3.5V9h3.6v11.5z"/></svg></span>
+              <span><small>LinkedIn</small><b>allyson-nonardo</b></span>
+            </a></li>
+            <li><a href="https://github.com/XyAllysondev" target="_blank" rel="noopener">
+              <span class="canal-ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.9 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5z"/></svg></span>
+              <span><small>GitHub</small><b>@XyAllysondev</b></span>
+            </a></li>
+            <li><a href="https://instagram.com/allyson_nonardo" target="_blank" rel="noopener">
+              <span class="canal-ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></span>
+              <span><small>Instagram</small><b>@allyson_nonardo</b></span>
+            </a></li>
+          </ul>
         </div>
 
-        <form id="form" class="painel form revela" data-endpoint="https://formspree.io/f/mjgqdnwz" novalidate>
-          <div class="form-cab"><span class="mono-acc">TRANSMISSÃO_SEGURA</span><span class="led"><i></i>PRONTO</span></div>
+        <form id="form" class="card form revela" data-endpoint="https://formspree.io/f/mjgqdnwz" novalidate>
           <div class="form-par">
             <p class="campo">
-              <label for="f-nome">NOME</label>
-              <input type="text" id="f-nome" name="nome" placeholder="seu nome" required
-                     aria-describedby="e-nome" />
-              <span class="campo-erro" id="e-nome"></span>
+              <label for="f-nome">Nome</label>
+              <input type="text" id="f-nome" name="nome" placeholder="Seu nome" required autocomplete="name" />
             </p>
             <p class="campo">
-              <label for="f-email">E-MAIL</label>
-              <input type="email" id="f-email" name="email" placeholder="voce@dominio.com" required
-                     aria-describedby="e-email" />
-              <span class="campo-erro" id="e-email"></span>
+              <label for="f-email">E-mail</label>
+              <input type="email" id="f-email" name="email" placeholder="voce@dominio.com" required autocomplete="email" />
             </p>
           </div>
           <p class="campo">
-            <label for="f-assunto">ASSUNTO</label>
-            <input type="text" id="f-assunto" name="assunto" placeholder="proposta de projeto" />
+            <label for="f-assunto">Assunto</label>
+            <input type="text" id="f-assunto" name="assunto" placeholder="Proposta de projeto" />
           </p>
           <p class="campo">
-            <label for="f-msg">MENSAGEM</label>
-            <textarea id="f-msg" name="mensagem" rows="5" placeholder="digite aqui..." required
-                      aria-describedby="e-msg"></textarea>
-            <span class="campo-erro" id="e-msg"></span>
+            <label for="f-msg">Mensagem</label>
+            <textarea id="f-msg" name="mensagem" rows="5" placeholder="Conta pra mim o que você precisa…" required></textarea>
           </p>
-          <button type="submit" class="btn btn-forte btn-full">
-            <span>TRANSMITIR</span>
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>
+          <div id="erro-resumo" role="status" aria-live="polite" tabindex="-1" hidden></div>
+          <button type="submit" class="btn btn-cheio btn-full">
+            <span>Enviar mensagem</span>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg>
           </button>
           <p class="retorno" id="retorno" role="status" aria-live="polite"></p>
         </form>
@@ -666,46 +555,34 @@
     </section>
   </main>
 
-  <!-- ▚▚ RODAPÉ ▚▚ -->
   <footer class="rodape">
-    <div class="rodape-linha">
-      <span class="mono-acc">ALLYSON_V // SISTEMA v2.6</span>
-      <a href="#" class="topo">TOPO ↑</a>
-    </div>
-    <div class="rodape-cols">
-      <p>HTML · CSS · JAVASCRIPT<br />ESCRITOS À MÃO, SEM DEPENDÊNCIAS</p>
-      <p>RECIFE — PE, BRASIL<br />© 2026 ALLYSON VINÍCIUS</p>
-      <p>
-        <a href="https://github.com/XyAllysondev" target="_blank" rel="noopener">GITHUB</a> ·
-        <a href="https://www.linkedin.com/in/allyson-nonardo-5b4b82323/" target="_blank" rel="noopener">LINKEDIN</a> ·
-        <a href="https://instagram.com/allyson_nonardo" target="_blank" rel="noopener">INSTAGRAM</a>
-      </p>
+    <div class="rodape-in">
+      <a href="#" class="marca" aria-label="Voltar ao topo">
+        <span class="marca-ico">A</span>
+        <span>Allyson<b>.</b></span>
+      </a>
+      <p>HTML, CSS e JavaScript escritos à mão, sem dependências.<br />Recife — PE · © 2026 Allyson Vinícius</p>
+      <nav class="rodape-links" aria-label="Redes">
+        <a href="https://github.com/XyAllysondev" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/allyson-nonardo-5b4b82323/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://instagram.com/allyson_nonardo" target="_blank" rel="noopener">Instagram</a>
+      </nav>
     </div>
   </footer>
 
-  <!-- ▚▚ COPILOTO — acompanha a leitura e comenta cada módulo ▚▚ -->
-  <div class="piloto" id="piloto" aria-hidden="true" inert>
-    <div class="piloto-balao" id="piloto-balao" aria-hidden="true"><span id="piloto-fala"></span></div>
-    <button class="piloto-corpo" id="piloto-corpo" aria-label="Voltar ao topo">
-      <svg viewBox="0 0 120 132" width="76" height="84">
-        <g class="piloto-antena">
-          <path d="M60 32V14" stroke="#22e1ff" stroke-width="3" stroke-linecap="round"/>
-          <circle class="piloto-luz" cx="60" cy="9" r="6" fill="#9dff5a"/>
-        </g>
-        <rect x="6" y="52" width="12" height="30" rx="5" fill="#0c121c" stroke="#22e1ff" stroke-width="2"/>
-        <rect x="102" y="52" width="12" height="30" rx="5" fill="#0c121c" stroke="#22e1ff" stroke-width="2"/>
-        <rect x="20" y="32" width="80" height="72" rx="24" fill="#0d131e" stroke="#22e1ff" stroke-width="2.5"/>
-        <rect x="30" y="44" width="60" height="46" rx="18" fill="#04070d" stroke="#22e1ff" stroke-width="1.2"/>
-        <g class="piloto-olhos" id="piloto-olhos">
-          <circle class="piloto-pupila" cx="46" cy="64" r="6.5" fill="#22e1ff"/>
-          <circle class="piloto-pupila" cx="74" cy="64" r="6.5" fill="#22e1ff"/>
-        </g>
-        <path class="piloto-boca" id="piloto-boca" d="M50 80h20" stroke="#22e1ff" stroke-width="3" stroke-linecap="round" fill="none"/>
-      </svg>
+  <aside class="guia" id="guia" aria-live="polite" aria-label="Guia do site">
+    <div class="guia-balao" id="guia-balao">
+      <p id="guia-fala">Oi! Eu sou o Allyson. Rola a página que eu te acompanho.</p>
+    </div>
+    <button class="guia-corpo" id="guia-corpo" type="button" aria-label="Voltar ao topo">
+      <video id="guia-video" autoplay muted loop playsinline preload="metadata" poster="assets/videos/guia-poster.jpg" aria-hidden="true" tabindex="-1">
+        <source src="assets/videos/guia.webm" type="video/webm" />
+        <source src="assets/videos/guia.mp4" type="video/mp4" />
+      </video>
+      <span class="guia-anel" aria-hidden="true"></span>
     </button>
-  </div>
+  </aside>
 
-  <script src="assets/js/robot.js"></script>
   <script src="assets/js/main.js"></script>
 </body>
 </html>
