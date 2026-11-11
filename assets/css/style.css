@@ -816,7 +816,7 @@ main { position: relative; }
   font-weight: 600;
   letter-spacing: -.005em;
 }
-.stack-col h3 span {
+.stack-col h3 > span:first-child {
   display: grid;
   place-items: center;
   width: 26px;
