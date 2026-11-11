@@ -7,8 +7,12 @@
 ---
 
 **Project:** Portfolio Allyson
-**Updated:** 2026-09-18
-**Category:** Soft Tech / Lavender Studio
+**Updated:** 2026-11-11
+**Category:** Editorial Dark / "Meia-noite" (v4)
+
+> ⚠️ A v4 trocou o tema lavanda por azul-marinho com viés índigo. As cores e
+> fontes listadas abaixo são da v3; a fonte da verdade agora é o `:root` de
+> `assets/css/style.css` (fundo `#0a0d1c`, acento `#9aa6ff`, Geist + Instrument Serif + Geist Mono).
 
 > Tokens reais em produção em `assets/css/style.css` (`:root`). Sempre use
 > estes valores — nunca hardcode cor nova sem checar se já existe um token.

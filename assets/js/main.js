@@ -11,6 +11,10 @@
 
   var calmo = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* Traduções vêm do i18n.js; sem ele, cai no texto da chave. */
+  var t = function (chave, vars) { return window.I18N ? window.I18N.t(chave, vars) : chave; };
+  var aoTrocarIdioma = function (fn) { document.addEventListener('idioma', fn); };
+
   /* ── 01 · VÍDEO DO HERO ────────────────────────────────────────── */
 
   var video  = $('#video-hero');
@@ -29,11 +33,12 @@
       var pausado = video.paused;
       toggle.classList.toggle('pausado', pausado);
       toggle.setAttribute('aria-pressed', String(pausado));
-      toggle.setAttribute('aria-label', pausado ? 'Reproduzir vídeo' : 'Pausar vídeo');
+      toggle.setAttribute('aria-label', pausado ? t('video.tocar') : t('video.pausar'));
     };
 
     video.addEventListener('play',  pintaToggle);
     video.addEventListener('pause', pintaToggle);
+    aoTrocarIdioma(pintaToggle);
     pintaToggle();
 
     if (toggle) {
@@ -68,13 +73,15 @@
 
   /* ── 02 · CABEÇALHO E ROLAGEM ──────────────────────────────────── */
 
-  var topo    = $('#topo');
-  var simbolo = $('#simbolo');
+  var topo = $('#topo');
+  var raiz = document.documentElement;
 
   function aoRolar() {
     var y = window.scrollY || window.pageYOffset;
     if (topo) topo.classList.toggle('rolou', y > 12);
-    if (simbolo && !calmo) simbolo.style.setProperty('--par', (y * -0.06) + 'px');
+    // --p alimenta a linha de progresso do trilho lateral e da barra do celular
+    var max = raiz.scrollHeight - window.innerHeight;
+    raiz.style.setProperty('--p', max > 0 ? Math.min(1, y / max) : 0);
   }
 
   var agendado = false;
@@ -84,6 +91,80 @@
     requestAnimationFrame(function () { aoRolar(); agendado = false; });
   }, { passive: true });
   aoRolar();
+
+  /* Relógio de Recife no cabeçalho (UTC−3, sem horário de verão). */
+  var relogio = $('#relogio');
+  if (relogio) {
+    var fmt = null;
+    try {
+      fmt = new Intl.DateTimeFormat('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Recife' });
+    } catch (e) { /* navegador sem suporte a fuso: some com o relógio */ }
+    var bate = function () { relogio.textContent = fmt.format(new Date()); };
+    if (fmt) { bate(); window.setInterval(bate, 15000); }
+    else if (relogio.parentNode) relogio.parentNode.hidden = true;
+  }
+
+  /* ── 02b · NAVEGAÇÃO LATERAL ───────────────────────────────────── */
+  /* Abre ao passar o mouse ou focar pelo teclado; o botão "fixar" deixa
+     aberta e empurra o conteúdo (a escolha fica salva no navegador). */
+
+  var lateral   = $('#lateral');
+  var fixar     = $('#lateral-fixar');
+  var indicador = $('#lateral-ind');
+  var CHAVE_FIXA = 'portfolio-lateral-fixa';
+  var fixa = false;
+
+  try { fixa = localStorage.getItem(CHAVE_FIXA) === '1'; } catch (e) { /* sem storage: começa recolhida */ }
+
+  function pintaLateral(aberta) {
+    if (!lateral) return;
+    lateral.classList.toggle('aberta', aberta || fixa);
+    document.body.classList.toggle('lateral-fixa', fixa);
+    if (fixar) {
+      fixar.setAttribute('aria-pressed', String(fixa));
+      fixar.setAttribute('aria-label', fixa ? t('lat.recolher') : t('lat.fixar.a11y'));
+      var rot = $('.lateral-txt', fixar);
+      if (rot) rot.textContent = fixa ? t('lat.recolher') : t('lat.fixar');
+    }
+  }
+
+  function moveIndicador() {
+    if (!indicador) return;
+    var ativo = $('.lateral-nav a.ativo');
+    if (!ativo) { indicador.classList.remove('visivel'); return; }
+    indicador.style.setProperty('--y', ativo.offsetTop + 'px');
+    indicador.classList.add('visivel');
+  }
+
+  if (lateral) {
+    var podeHover = window.matchMedia('(hover: hover)').matches;
+    if (podeHover) {
+      lateral.addEventListener('mouseenter', function () { pintaLateral(true); });
+      lateral.addEventListener('mouseleave', function () {
+        if (!lateral.contains(document.activeElement)) pintaLateral(false);
+      });
+    }
+    lateral.addEventListener('focusin',  function () { pintaLateral(true); });
+    lateral.addEventListener('focusout', function (e) {
+      if (!lateral.contains(e.relatedTarget) && !(podeHover && lateral.matches(':hover'))) pintaLateral(false);
+    });
+    // depois de clicar num link, recolhe (a não ser que esteja fixa)
+    $$('a', lateral).forEach(function (a) {
+      a.addEventListener('click', function () {
+        a.blur();
+        if (!podeHover || !lateral.matches(':hover')) pintaLateral(false);
+      });
+    });
+    if (fixar) {
+      fixar.addEventListener('click', function () {
+        fixa = !fixa;
+        try { localStorage.setItem(CHAVE_FIXA, fixa ? '1' : '0'); } catch (e) { /* ignora */ }
+        pintaLateral(true);
+      });
+    }
+    pintaLateral(false);
+    aoTrocarIdioma(function () { pintaLateral(lateral.classList.contains('aberta')); });
+  }
 
   /* ── 03 · MENU MÓVEL ───────────────────────────────────────────── */
 
@@ -100,7 +181,7 @@
     if (burger) {
       burger.classList.remove('x');
       burger.setAttribute('aria-expanded', 'false');
-      burger.setAttribute('aria-label', 'Abrir menu');
+      burger.setAttribute('aria-label', t('menu.abrir'));
       if (devolveFoco) burger.focus();
     }
     document.body.style.overflow = '';
@@ -114,10 +195,14 @@
       menu.inert = false;
       burger.classList.add('x');
       burger.setAttribute('aria-expanded', 'true');
-      burger.setAttribute('aria-label', 'Fechar menu');
+      burger.setAttribute('aria-label', t('menu.fechar'));
       document.body.style.overflow = 'hidden';
       var primeiro = $('nav a', menu);
       if (primeiro) primeiro.focus();
+    });
+
+    aoTrocarIdioma(function () {
+      burger.setAttribute('aria-label', menu.classList.contains('aberto') ? t('menu.fechar') : t('menu.abrir'));
     });
 
     $$('#menu-movel a').forEach(function (a) {
@@ -191,7 +276,7 @@
   /* ── 05 · SEÇÃO ATIVA NO MENU + GUIA ───────────────────────────── */
 
   var secoes = $$('main section[id]');
-  var elos   = $$('.menu a');
+  var elos   = $$('.lateral-nav a, .menu-movel nav a');
 
   var guia      = $('#guia');
   var guiaBalao = $('#guia-balao');
@@ -199,24 +284,23 @@
   var guiaVideo = $('#guia-video');
   var guiaCorpo = $('#guia-corpo');
 
-  var FALAS = {
-    inicio:       'Oi! Eu sou o <b>Allyson</b>. Rola a página que eu te acompanho.',
-    sobre:        'Aqui é a minha história: comecei consertando o que quebrava.',
-    stack:        'Essas são as ferramentas que eu uso <b>todo dia</b>.',
-    projetos:     'Clica em <b>Ver ao vivo</b> — os projetos rodam de verdade aqui dentro.',
-    experiencia:  'Por onde já passei: TI, freela e a faculdade de <b>Engenharia</b>.',
-    certificados: '<b>11 cursos</b> concluídos. Cada um abre o PDF do certificado.',
-    contato:      'Curtiu? Me manda uma mensagem — respondo <b>em horas</b>.'
+  /* Falas do guia: textos em i18n.js (chaves fala.<seção>); os números
+     de projetos e certificados são contados na própria página. */
+  var SECOES_COM_FALA = ['inicio', 'sobre', 'stack', 'projetos', 'experiencia', 'certificados', 'contato'];
+  var fala = function (id) {
+    return t('fala.' + id, { n: id === 'projetos' ? $$('.proj').length : $$('#certs li').length });
   };
   var falaAtual = 'inicio';
+  if (guiaFala) guiaFala.innerHTML = fala('inicio');
+  aoTrocarIdioma(function () { if (guiaFala) guiaFala.innerHTML = fala(falaAtual); });
 
   function guiaDiz(id) {
-    if (!guiaFala || !FALAS[id] || id === falaAtual) return;
+    if (!guiaFala || SECOES_COM_FALA.indexOf(id) < 0 || id === falaAtual) return;
     falaAtual = id;
-    if (calmo) { guiaFala.innerHTML = FALAS[id]; return; }
+    if (calmo) { guiaFala.innerHTML = fala(id); return; }
     guiaBalao.classList.add('troca');
     window.setTimeout(function () {
-      guiaFala.innerHTML = FALAS[id];
+      guiaFala.innerHTML = fala(id);
       guiaBalao.classList.remove('troca');
       guiaBalao.classList.add('pulo');
       window.setTimeout(function () { guiaBalao.classList.remove('pulo'); }, 520);
@@ -256,6 +340,7 @@
         elos.forEach(function (a) {
           a.classList.toggle('ativo', a.getAttribute('href') === '#' + id);
         });
+        moveIndicador();
         guiaDiz(id);
       });
     }, { rootMargin: '-40% 0px -55% 0px' });
@@ -276,10 +361,10 @@
 
   if (form) {
     var CAMPOS = [
-      { alvo: '#f-nome',  nome: 'nome',  vazio: 'Informe seu nome.' },
-      { alvo: '#f-email', nome: 'email', vazio: 'Informe seu e-mail.',
-        formato: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, malformado: 'E-mail inválido. Use o formato nome@dominio.com' },
-      { alvo: '#f-msg',   nome: 'mensagem', vazio: 'Escreva sua mensagem.' }
+      { alvo: '#f-nome',  nome: 'nome',  vazio: 'form.vazio.nome' },
+      { alvo: '#f-email', nome: 'email', vazio: 'form.vazio.email',
+        formato: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, malformado: 'form.email.invalido' },
+      { alvo: '#f-msg',   nome: 'mensagem', vazio: 'form.vazio.msg' }
     ].filter(function (c) {
       c.el = $(c.alvo, form);
       c.idErro = 'erro-' + c.nome;
@@ -288,8 +373,8 @@
 
     function problema(c) {
       var v = c.el.value.trim();
-      if (!v) return c.vazio;
-      if (c.formato && !c.formato.test(v)) return c.malformado;
+      if (!v) return t(c.vazio);
+      if (c.formato && !c.formato.test(v)) return t(c.malformado);
       return '';
     }
 
@@ -329,8 +414,8 @@
     function mostraResumo(falhos) {
       if (!resumo) return;
       resumo.textContent = falhos.length === 1
-        ? '1 campo precisa de correção: ' + falhos[0].rotulo + '.'
-        : falhos.length + ' campos precisam de correção: ' + falhos.map(function (f) { return f.rotulo; }).join(', ') + '.';
+        ? t('form.um', { campo: falhos[0].rotulo })
+        : t('form.varios', { n: falhos.length, campos: falhos.map(function (f) { return f.rotulo; }).join(', ') });
       resumo.hidden = false;
       resumo.focus();
     }
@@ -352,7 +437,7 @@
 
       if (falhos.length) {
         mostraResumo(falhos);
-        return diz(falhos.length === 1 ? falhos[0].msg : falhos.length + ' campos precisam de correção.', 'bad');
+        return diz(falhos.length === 1 ? falhos[0].msg : t('form.varios.curto', { n: falhos.length }), 'bad');
       }
       escondeResumo();
 
@@ -362,9 +447,9 @@
       if (btn) {
         btn.disabled = true;
         btn.setAttribute('aria-busy', 'true');
-        if (rotSpan) rotSpan.textContent = 'Enviando…';
+        if (rotSpan) rotSpan.textContent = t('form.enviando');
       }
-      diz('Enviando sua mensagem…');
+      diz(t('form.enviando.msg'));
 
       fetch(form.getAttribute('data-endpoint'), {
         method: 'POST',
@@ -375,10 +460,10 @@
           if (!r.ok) throw new Error(r.status);
           form.reset();
           CAMPOS.forEach(function (c) { pinta(c, ''); });
-          diz('Mensagem recebida! Respondo em breve.', 'ok');
+          diz(t('form.ok'), 'ok');
         })
         .catch(function () {
-          diz('Não consegui enviar. Verifique sua conexão ou escreva para allysonfulldev@gmail.com', 'bad');
+          diz(t('form.erro'), 'bad');
         })
         .then(function () {
           if (btn) {
@@ -388,6 +473,80 @@
           }
         });
     });
+  }
+
+  /* ── 06b · CERTIFICADOS (filtro + mostrar mais) ────────────────── */
+  /* Sem JS a lista aparece inteira; com JS mostra só os primeiros e
+     calcula sozinho os totais do título e de cada filtro. */
+
+  var listaCerts = $('#certs');
+  if (listaCerts) {
+    var certs     = $$('li', listaCerts);
+    var filtroBox = $('#certs-filtro');
+    var botaoMais = $('#certs-mais');
+    var LIMITE    = 6;
+    var catAtual  = 'todos';
+    var expandido = false;
+
+    var totalHoras = certs.reduce(function (s, li) {
+      return s + (parseFloat(li.getAttribute('data-h')) || 0);
+    }, 0);
+    var qtdEl   = $('#certs-qtd');
+    var horasEl = $('#certs-horas');
+    var pintaTotais = function () {
+      if (qtdEl)   qtdEl.textContent   = certs.length;
+      if (horasEl) horasEl.textContent = totalHoras.toLocaleString(window.I18N ? window.I18N.tag() : 'pt-BR');
+    };
+    pintaTotais();
+
+    var daCategoria = function (cat) {
+      return certs.filter(function (li) { return cat === 'todos' || li.getAttribute('data-cat') === cat; });
+    };
+
+    var pintaCerts = function () {
+      var visiveis = daCategoria(catAtual);
+      certs.forEach(function (li) { li.classList.add('fora'); });
+      visiveis.forEach(function (li, k) {
+        if (expandido || k < LIMITE) li.classList.remove('fora');
+      });
+      if (!botaoMais) return;
+      var resto = visiveis.length - LIMITE;
+      botaoMais.hidden = resto <= 0;
+      botaoMais.setAttribute('aria-expanded', String(expandido));
+      $('span', botaoMais).textContent = expandido ? t('certs.menos') : t('certs.mais', { n: resto });
+    };
+
+    if (filtroBox) {
+      $$('button', filtroBox).forEach(function (b) {
+        var n = daCategoria(b.getAttribute('data-f')).length;
+        var i = $('i', b);
+        if (i) i.textContent = n;
+        if (!n) b.hidden = true;
+
+        b.addEventListener('click', function () {
+          catAtual  = b.getAttribute('data-f');
+          expandido = false;
+          $$('button', filtroBox).forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+          pintaCerts();
+        });
+      });
+      filtroBox.hidden = false;
+    }
+
+    if (botaoMais) {
+      botaoMais.addEventListener('click', function () {
+        expandido = !expandido;
+        pintaCerts();
+        // ao recolher, não deixa o visitante "cair" lá embaixo da página
+        if (!expandido) {
+          var topoLista = listaCerts.getBoundingClientRect().top;
+          if (topoLista < 0) window.scrollBy(0, topoLista - 140);
+        }
+      });
+    }
+
+    pintaCerts();
+    aoTrocarIdioma(function () { pintaTotais(); pintaCerts(); });
   }
 
   /* ── 07 · ROLAGEM COM COMPENSAÇÃO DO CABEÇALHO ─────────────────── */
@@ -406,7 +565,9 @@
       var dest = document.querySelector(alvo);
       if (!dest) return;
       ev.preventDefault();
-      var y = dest.getBoundingClientRect().top + window.scrollY - 72;
+      // no desktop não há barra no topo; no celular desconta a barra fixa
+      var folga = topo && topo.offsetHeight ? topo.offsetHeight + 12 : 24;
+      var y = dest.getBoundingClientRect().top + window.scrollY - folga;
       window.scrollTo({ top: Math.max(0, y), behavior: calmo ? 'auto' : 'smooth' });
       if (history.replaceState) history.replaceState(null, '', alvo);
     });
@@ -421,6 +582,11 @@
     var url    = caixa.getAttribute('data-vivo');
     var nome   = caixa.getAttribute('data-nome') || 'projeto';
     var rotulo = $('span', botao);
+    var pintaRotulo = function () {
+      rotulo.textContent = caixa.classList.contains('ao-vivo') ? t('proj.fechar') : t('proj.vivo');
+    };
+    pintaRotulo();
+    aoTrocarIdioma(pintaRotulo);
 
     botao.addEventListener('click', function () {
       if (caixa.classList.contains('ao-vivo')) {
@@ -429,17 +595,17 @@
         if (f) f.remove();
         if (c) c.remove();
         caixa.classList.remove('ao-vivo');
-        rotulo.textContent = 'Ver ao vivo';
+        pintaRotulo();
         return;
       }
 
       var aviso = document.createElement('div');
       aviso.className = 'proj-carregando';
-      aviso.textContent = 'Abrindo ' + nome + '…';
+      aviso.textContent = t('proj.abrindo', { nome: nome });
 
       var frame = document.createElement('iframe');
       frame.className = 'proj-quadro';
-      frame.title = nome + ' rodando ao vivo';
+      frame.title = t('proj.iframe', { nome: nome });
       frame.loading = 'lazy';
       frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox');
       frame.setAttribute('referrerpolicy', 'no-referrer');
@@ -449,7 +615,7 @@
       caixa.appendChild(aviso);
       caixa.appendChild(frame);
       caixa.classList.add('ao-vivo');
-      rotulo.textContent = 'Fechar';
+      pintaRotulo();
     });
   });
 
